@@ -1,0 +1,23 @@
+"use strict"
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {Table, Column, Cell} from 'fixed-data-table-2'
+import GroupStore from './stores/GroupStore'
+import Table1 from './components/Table1'
+ 
+// Table data as a list of array. 
+const rows = [
+  ['08:47:07.796', 'GSM1', '1', '3,034', '3,077', '2,612','0.018', '0.018', '0.018', '0.019', '0.019', '1,933,739', '871,086', '3', '1,757', '0'],
+  ['00:00:00.000', 'WOL3', '0', '0', '0', '0','0.000', '0.000', '0.000', '0.000', '0.000', '0', '0', '0', '0', '0'],
+  // .... and more 
+];
+
+// Render your table 
+ReactDOM.render(
+      <Table1
+        width={800}>
+      </Table1>
+    ,
+  document.getElementById('app'));
+
+

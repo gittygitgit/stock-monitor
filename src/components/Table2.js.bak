@@ -1,0 +1,74 @@
+"use strict"
+
+import React from 'react'
+const {Table, Column, Cell} = require('fixed-data-table-2')
+//import GroupStore from '../stores/GroupStore'
+import FirmStore from '../stores/FirmStore'
+import TextCell from './TextCell'
+
+console.log("table2")
+
+const rows = [
+  ['a1', 'b1', 'c1'],
+  ['a2', 'b2', 'c2'],
+  ['a3', 'b3', 'c3'],
+];
+
+class Table2 extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  /*componentDidMount() {
+    this.timerId = setInterval(
+      () => this.props.onAddFirm("abc"),
+      3000
+    );
+    console.log(this.props);
+  }*/
+
+  render() {
+    console.log("render");
+    if (this.props.firms.size === 0) {
+      return null;
+    }
+    console.log("render2");
+    console.log(this.props.firms.size);
+    return (
+<Table
+        //rowsCount={this.props.firms.size}
+        rowsCount={1}
+        rowHeight={30}
+        width={400}
+        height={500}
+        headerHeight={30}
+        >
+       <Column
+            header={<Cell>Col 1</Cell>}
+            cell={<Cell>Column 1 static content</Cell>}
+            width={200}
+          />
+       <Column
+            header={<Cell>Col 2</Cell>}
+            cell={<Cell>Column 2 static content</Cell>}
+            width={200}
+          />
+      </Table>
+/*
+        <Column
+          columnKey="last"
+          header={"Last"}
+          cell={<TextCell data={this.props.firms}/>}
+          width={400}
+        />
+         <Column
+          columnKey="firm"
+          header={"Firm"}
+          cell={<TextCell data={this.props.firms}/>}
+          width={400}
+        />*/
+    );
+  }
+}
+
+export default Table2;

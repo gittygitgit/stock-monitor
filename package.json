@@ -1,0 +1,35 @@
+{
+  "name": "fixed_data_table",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "fixed-data-table-2": "^0.7.14",
+    "flux": "^3.1.2",
+    "gulp-babel": "^6.1.2",
+    "gulp-open": "^2.0.0",
+    "moment": "^2.18.1",
+    "react": "^15.3.0",
+    "react-bootstrap": "^0.31.0",
+    "react-dom": "^15.3.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-react-jsx": "^6.8.0",
+    "babel-preset-env": "^1.3.3",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-latest": "^6.24.0",
+    "babel-preset-react": "^6.11.1",
+    "browserify": "^13.3.0"
+  }
+}
