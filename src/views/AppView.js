@@ -3,23 +3,35 @@ import Table2 from '../components/Table2';
 const {Table, Column, Cell} = require('fixed-data-table-2');
 import SideBar from './SideBar';
 
-console.log("AppView");
-function AppView(props) {
-  const styles = {
-    width: 1800,
-    margin: '0 auto 10px',
-    position: 'fixed',
-    left: 0
-  };
+class AppView extends React.Component {
 
-  return (
+  constructor(props) {
+    super(props);
+    console.log("AppView::ctor");
+    console.log(props);
+    this.style = {
+      width: 1800,
+      margin: '0 auto 10px',
+      position: 'fixed',
+      left: 1000
+    };
+  }
+
+  componentDidMount() {
+    this.props.actions.initialize(); 
+  }
+
+  render(props) {
+    console.log("AppView::render");
+    return (
     <div id="wrapper">
       <SideBar/>
-      <div id="page-content-wrapper" className="container-fluid" style={styles}>
-        <Table2 width={800} {...props}></Table2>
+      <div id="page-content-wrapper" className="container-fluid" style={this.styles}>
+        <Table2 width={800} {...this.props}></Table2>
       </div>
     </div>
-  );  
+    );
+  }
 }
 
 export default AppView;

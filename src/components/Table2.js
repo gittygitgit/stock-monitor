@@ -17,20 +17,27 @@ class Table2 extends React.Component {
       () => this.props.onAddFirm("abc"),
       1000
     );*/
-    this.props.addFirm({firm: "GSM1"};
-    this.props.addFirm({firm: "WOL1"};
+    console.log("Table2::componentDidMount");
     this.timerId = setInterval(
-      () => this.props.firmEvent(this.firmApi.firmEvent()),
+      () => {
+        let e = this.firmApi.firmEvent();
+        this.props.actions.firmEvent(e);
+      },
       1000
     );
-    console.log(this.props);
   }
 
   render() {
+    console.log("Table2::render");
+    if (this.props.firms == null) {
+      return null;
+    }
     if (this.props.firms.size === 0) {
       return null;
     }
-    console.log(this.firmApi);
+    let rows = this.props.firms.toIndexedSeq();
+    console.log(rows); 
+    console.log(rows.get(0));
     return (
       <Table
         rowsCount={this.props.firms.size}
@@ -43,14 +50,14 @@ class Table2 extends React.Component {
         header={<Cell>Firm</Cell>}
         cell={
           ({rowIndex}) => (
-            <Cell>{this.props.firms.get(rowIndex)["firm"]}
+            <Cell>{rows.get(rowIndex)["name"]}
         </Cell>)}
         width={200} />
       <Column
         header={<Cell>Last</Cell>}
         cell={
           ({rowIndex}) => (
-            <Cell>{this.props.firms.get(rowIndex)["last"]}
+            <Cell>{rows.get(rowIndex)["last"]}
         </Cell>)}
         width={200} />
       </Table>
