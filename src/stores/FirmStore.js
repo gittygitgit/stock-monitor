@@ -29,9 +29,11 @@ class FirmStore extends ReduceStore {
       case ActionTypes.INITIALIZE:
         console.log("INITIALIZE");
         let firms = FirmApi.getFirms();
-        
-        state = state.mergeDeep(Map({"GSM1": {name: "GSM1", last:moment().format('hh:mm:ss.SSS')}}));
-        state = state.mergeDeep(Map({"WOL2": {name: "WOL2", last:moment().format('hh:mm:ss.SSS')}}));
+
+        let f1 = Map({"GSM1": Map({name: "GSM1", last:moment().format('hh:mm:ss.SSS'), changed: true})});        
+        let f2 = Map({"WOL2": Map({name: "WOL2", last:moment().format('hh:mm:ss.SSS'), changed: true})});        
+        state = state.mergeDeep(f1);
+        state = state.mergeDeep(f2);
 
         /*firms = firms.push({firm: "GSM1", last:moment().format('hh:mm:ss.SSS')});
         firms = firms.push({firm: "WOL1", last:'00:00:00.000'});
@@ -45,8 +47,17 @@ class FirmStore extends ReduceStore {
       case ActionTypes.FIRM_EVENT:
         console.log("UPDATE_FIRM");
         console.log(state);
-        state = state.mergeDeep(Map().set(action.firm.name, {name: action.firm.name, last:action.firm.last}));
-        return state;
+        
+        // reset changed flag
+        state = state.map( f => f.set("changed", false));
+        
+        let now  = state;
+        let next = state.mergeDeep(Map().set(action.firm.name, Map({name: action.firm.name, last:action.firm.last, changed: true})));
+        
+        if (!now.equals(next)) {
+          console.log("state changed"); 
+        }
+        return next;
       default:
         return state;
     }

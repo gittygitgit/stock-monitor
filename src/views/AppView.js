@@ -13,7 +13,7 @@ class AppView extends React.Component {
       width: 1800,
       margin: '0 auto 10px',
       position: 'fixed',
-      left: 1000
+      left: 0
     };
   }
 
@@ -26,7 +26,7 @@ class AppView extends React.Component {
     return (
     <div id="wrapper">
       <SideBar/>
-      <div id="page-content-wrapper" className="container-fluid" style={this.styles}>
+      <div id="page-content-wrapper" className="container-fluid" style={this.style}>
         <Table2 width={800} {...this.props}></Table2>
       </div>
     </div>

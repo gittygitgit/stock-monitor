@@ -21,7 +21,8 @@ var config = {
 //      'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
       'node_modules/fixed-data-table-2/dist/fixed-data-table-base.css',
       'node_modules/fixed-data-table-2/dist/fixed-data-table.css',
-      'node_modules/fixed-data-table-2/dist/fixed-data-table-style.css'
+      'node_modules/fixed-data-table-2/dist/fixed-data-table-style.css',
+      './src/css/mike.css'
     ],
     dist: './dist',
     main: './src/main.js'
