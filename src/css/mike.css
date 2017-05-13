@@ -1,4 +1,25 @@
 .changed {
-  background-color: orange
+  background-color: navy;
+  border-collapse: collapse;
+  display:table-cell
 }
+
+.myrow {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 12px;
+  color: white;
+  background-color:black;
+  border-bottom-style: solid;
+  border-bottom-witdh: 1px;
+  border-top-style: none;
+  border-collapse: collapse;
+  display:table-row
+}
+
+.mycell {
+  background-color:black;
+  border-collapse: collapse;
+  display:table-cell
+}
+
 

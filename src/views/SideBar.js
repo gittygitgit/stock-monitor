@@ -8,7 +8,7 @@ function SideBar(props) {
     margin: '0 auto 10px', 
     position: 'fixed',
     zIndex: 1000,
-    left: 1000 
+    left: 1140 
   };
 
   return (
