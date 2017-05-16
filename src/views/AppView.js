@@ -1,7 +1,7 @@
 import React from 'react';
-import Table2 from '../components/Table2';
+import SQFGrid from '../components/SQFGrid';
 const {Table, Column, Cell} = require('fixed-data-table-2');
-import SideBar from './SideBar';
+import SideBar from '../components/SideBar';
 
 class AppView extends React.Component {
 
@@ -27,7 +27,7 @@ class AppView extends React.Component {
     <div id="wrapper">
       <SideBar/>
       <div id="page-content-wrapper" className="container-fluid" style={this.style}>
-        <Table2 width={800} {...this.props}></Table2>
+        <SQFGrid width={800} {...this.props}></SQFGrid>
       </div>
     </div>
     );

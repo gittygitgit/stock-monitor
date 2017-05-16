@@ -7,7 +7,7 @@ import TextCell from './TextCell'
 import StockMonitorCell from './StockMonitorCell'
 import FirmApi from '../api/FirmApi'
 
-class Table2 extends React.Component {
+class SQFGrid extends React.Component {
   constructor(props) {
     super(props);
     this.firmApi = FirmApi;
@@ -17,37 +17,36 @@ class Table2 extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Table2::componentDidMount");
+    console.log("SQFGrid::componentDidMount");
     this.timerId = setInterval(
       () => {
         let e = this.firmApi.firmEvent();
-        console.log(e);
         this.props.actions.firmEvent(e);
       },
-      1000
+      250
     );
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("Table2::componentWillReceiveProps");
+    console.log("SQFGrid::componentWillReceiveProps");
     let now     = this.props.firms;
     let next    = nextProps.firms;
 
     for (let k of now.keys()) {
       //detect changed firms
       if (!now.get(k).equals(next.get(k))) {
-        console.log(k + " changed.");
+//        console.log(k + " changed.");
         
       }
     }
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log("Table2::componentWillUpdate");
+    console.log("SQFGrid::componentWillUpdate");
   }
 
   render() {
-    console.log("Table2::render");
+    console.log("SQFGrid::render");
     if (this.props.firms == null) {
       return null;
     }
@@ -55,7 +54,6 @@ class Table2 extends React.Component {
       return null;
     }
     let rows = this.props.firms.toIndexedSeq();
-    console.log("Table2::render2");
     return (
       <Table
         rowsCount={this.props.firms.size}
@@ -70,11 +68,9 @@ class Table2 extends React.Component {
         <Column
           header={<Cell>Last</Cell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell row={rows.get(rowIndex)} field="last" width={100} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="last" width={100} {...this.props}></StockMonitorCell>)
           }
           width={100} />
-
-/*
         <Column
           header={<Cell>Grp</Cell>}
           cell={
@@ -159,10 +155,9 @@ class Table2 extends React.Component {
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="undPurges" width={75} {...this.props}></StockMonitorCell>)
           }
           width={75} /> 
-*/
       </Table>
     );
   }
 }
 
-export default Table2;
+export default SQFGrid;

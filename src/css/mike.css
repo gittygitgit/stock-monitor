@@ -1,6 +1,5 @@
-.changed {
+.active-row {
   background-color: navy;
-  border-collapse: collapse;
   display:table-cell
 }
 
@@ -10,16 +9,16 @@
   color: white;
   background-color:black;
   border-bottom-style: solid;
-  border-bottom-witdh: 1px;
+  border-bottom-width: 1px;
   border-top-style: none;
-  border-collapse: collapse;
   display:table-row
 }
 
 .mycell {
   background-color:black;
-  border-collapse: collapse;
-  display:table-cell
+  display:table-cell;
 }
 
-
+.changed {
+  background-color: green;
+}
