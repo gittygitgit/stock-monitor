@@ -6,6 +6,7 @@ import FirmStore from '../stores/FirmStore'
 import TextCell from './TextCell'
 import StockMonitorCell from './StockMonitorCell'
 import FirmApi from '../api/FirmApi'
+import SQFGridHeaderCell from './SQFGridHeaderCell'
 
 class SQFGrid extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class SQFGrid extends React.Component {
     this.changeStyle = {
       background: 'red'
     };
+    this._onSortChange = this._onSortChange.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +30,7 @@ class SQFGrid extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("SQFGrid::componentWillReceiveProps");
+    //console.log("SQFGrid::componentWillReceiveProps");
     let now     = this.props.firms;
     let next    = nextProps.firms;
 
@@ -42,11 +44,34 @@ class SQFGrid extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log("SQFGrid::componentWillUpdate");
+    //console.log("SQFGrid::componentWillUpdate");
+  }
+
+  _onSortChange(colKey) {
+    console.log("SQFGrid::onSort [colKey=%s]", colKey);
+    
+    console.log(this.props.firms);
+    let sorted = this.props.firms.sortBy(
+      (v, k) => {
+        console.log(v.get(colKey));
+        return v.get(colKey); 
+      },
+      (a, b) => {
+        if ( a < b ) {
+          return -1; 
+        } else if ( a == b ) {
+          return 0;
+        } else {
+          return 1;
+        }
+      }
+    ); 
+    console.log(sorted); 
+    this.props.actions.sort(sorted);
   }
 
   render() {
-    console.log("SQFGrid::render");
+    //console.log("SQFGrid::render");
     if (this.props.firms == null) {
       return null;
     }
@@ -66,13 +91,15 @@ class SQFGrid extends React.Component {
         }
         headerHeight={30} >
         <Column
-          header={<Cell>Last</Cell>}
+          columnKey="last"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange}>Last</SQFGridHeaderCell>}
           cell={
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="last" width={100} {...this.props}></StockMonitorCell>)
           }
           width={100} />
         <Column
-          header={<Cell>Grp</Cell>}
+          columnKey="firm"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange}>Grp</SQFGridHeaderCell>}
           cell={
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="firm" width={75} {...this.props}></StockMonitorCell>)
           }

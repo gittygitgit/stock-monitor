@@ -12,13 +12,11 @@ class StockMonitorCell extends React.PureComponent {
     this.state = {
       dirty:false
     };
-    console.log("StockMonitorCell::ctor");
-    console.log(props);
   }
 
   
   componentWillReceiveProps(nextProps) {
-    console.log("StockMonitorCell::componentWillReceiveProps");
+    //console.log("StockMonitorCell::componentWillReceiveProps");
 
     const { rows, rowIndex, field } = this.props;
     const { rows: rowsNext, rowIndex: rowIndexNext, field: fieldNext } = nextProps;
@@ -27,7 +25,7 @@ class StockMonitorCell extends React.PureComponent {
     let next = rowsNext.get(rowIndexNext).get(fieldNext);
 
     if (now !== next) {
-      console.log("The value of %s has changed [old-val: %s, new-val: %s]", field, now, next);
+//      console.log("The value of %s has changed [old-val: %s, new-val: %s]", field, now, next);
 
       this.setState({
 	dirty: true
@@ -41,8 +39,7 @@ class StockMonitorCell extends React.PureComponent {
   }
 
   render() {
-    console.log("StockMonitorCell::render");
-    console.log(this.state);
+    //console.log("StockMonitorCell::render");
     const {rows, rowIndex, field, width, ...props} = this.props;
 
     let activeRow = rows.get(rowIndex).get("changed") === true;

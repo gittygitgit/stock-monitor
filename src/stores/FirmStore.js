@@ -14,7 +14,7 @@ const moment = require('moment');
 
 class FirmStore extends ReduceStore {
   constructor() {
-    console.log("FirmStore::ctor");
+//    console.log("FirmStore::ctor");
     super(AppDispatcher);
   }
 
@@ -24,41 +24,36 @@ class FirmStore extends ReduceStore {
   }
  
   reduce(state, action) {
-    console.log("FirmStore::reduce");
+ //   console.log("FirmStore::reduce");
     switch (action.type) {
       case ActionTypes.INITIALIZE:
         console.log("INITIALIZE");
         let firms = FirmApi.getFirms();
 
-  //      let f1 = Map({"GSM1": Map({firm: "GSM1", last:moment().format('hh:mm:ss.SSS'), changed: true})});        
-  //      let f2 = Map({"WOL2": Map({firm: "WOL2", last:moment().format('hh:mm:ss.SSS'), changed: true})});        
-  //      state = state.mergeDeep(f1);
-  //      state = state.mergeDeep(f2);
-
-        /*firms = firms.push({firm: "GSM1", last:moment().format('hh:mm:ss.SSS')});
-        firms = firms.push({firm: "WOL1", last:'00:00:00.000'});
-        firms = firms.push({firm: "WOL2", last:'00:00:00.000'});
-        firms = firms.push({firm: "WOL3", last:'00:00:00.000'});*/
         return state;
       case ActionTypes.ADD_FIRM:
-        console.log("ADD_FIRM");
+//        console.log("ADD_FIRM");
         state = state.push({firm:action.firm.name, last:moment().format('hh:mm:ss.SSS')});
         return state;
       case ActionTypes.FIRM_EVENT:
-        console.log("FIRM_EVENT");
+//        console.log("FIRM_EVENT");
         
         // reset changed flag
         state = state.map( f => f.set("changed", false));
         let now  = state;
   
         let event = action.firm;
-        //let next = state.mergeDeep(Map().set(event.firm, Map({firm: event.firm, last:event.last, changed: true})));
         let next = state.mergeDeep(Map().set(event.firm, Map(event).set("changed", true)));
         
         if (!now.equals(next)) {
-          console.log("state changed"); 
+//          console.log("state changed"); 
         }
         return next;
+      case ActionTypes.SORT:
+        console.log("FirmStore::reduce [actionType=SORT]");
+        let sorted=action.sorted;
+        state = sorted;
+        return state;
       default:
         return state;
     }

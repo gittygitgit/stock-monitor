@@ -3,13 +3,13 @@ import AppDispatcher from '../AppDispatcher'
 
 const Actions = {
   initialize() {
-    console.log("initialize");
+    console.log("Actions::initialize");
     AppDispatcher.dispatch({
       type: ActionTypes.INITIALIZE,
     });
   },
   addFirm(firm) {
-    console.log("addFirm");
+    console.log("Actions::addFirm");
     console.log(firm);
     AppDispatcher.dispatch({
       type: ActionTypes.ADD_FIRM,
@@ -17,10 +17,17 @@ const Actions = {
     });
   },
   firmEvent(firm) {
-    console.log("firmEvent");
+//    console.log("Actions::firmEvent");
     AppDispatcher.dispatch({
       type: ActionTypes.FIRM_EVENT,
       firm,
+    });
+  },
+  sort(sorted) {
+    console.log("Actions::sort");
+    AppDispatcher.dispatch({
+      type: ActionTypes.SORT,
+      sorted,
     });
   },
 };
