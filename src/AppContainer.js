@@ -15,7 +15,7 @@ class AppContainer extends React.Component {
     //console.log("AppContainer::calculateState");
     console.log(FirmStore.getState());
     return {
-      firms: FirmStore.getState(),
+      firms: FirmStore.getState().get("firms"),
       actions: {
         initialize: Actions.initialize,
         addFirm:    Actions.addFirm,

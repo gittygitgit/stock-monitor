@@ -10,10 +10,10 @@ class FirmApi {
   constructor() {
     console.log("FirmAPI");
     this.firms = Map();
-    this.firms = this.firms.set("WOL2", {});
-    this.firms = this.firms.set("CDRB", {});
-    this.firms = this.firms.set("IMDB", {});
-    this.firms = this.firms.set("GSM1", {});
+    this.firms = this.firms.set("WOL2", Map(new Firm(0, "WOL2", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
+    this.firms = this.firms.set("CDRB", Map(new Firm(0, "CDRB", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
+    this.firms = this.firms.set("IMDB", Map(new Firm(0, "IMDB", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
+    this.firms = this.firms.set("GSM1", Map(new Firm(0, "GSM1", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
   }
 
   randInt(low, high) {
