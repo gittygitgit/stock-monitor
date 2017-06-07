@@ -34,14 +34,14 @@ class SQFGridHeaderCell extends React.Component{
       columnKey, 
       this.props.sortDir ?
         this.reverseSortDirection(this.props.sortDir) :
-        SortDir.DESC);
+        SortDir.ASC);
   }
 
   render() {
     //console.log("SQFGridHeaderCell::render");
-    var { children, ...props } = this.props;
+    var { children, sortDir, ...props } = this.props;
     return (<Cell {...props}>
-      <a onClick={this._onSortChange}>{children}</a>
+      <a onClick={this._onSortChange}>{children} { sortDir ? (sortDir === SortDir.ASC) ? String.fromCharCode( "9650") : String.fromCharCode("9660") : '' }</a>
     </Cell>); 
 
   }
