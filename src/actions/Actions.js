@@ -23,11 +23,13 @@ const Actions = {
       firm,
     });
   },
-  sort(sorted) {
-    console.log("Actions::sort");
+  sort(sorted, sortCol, sortDir) {
+    console.log("Actions::sort [sortCol=%s, sortDir=%s]", sortCol, sortDir);
     AppDispatcher.dispatch({
-      type: ActionTypes.SORT,
-      sorted,
+      type:    ActionTypes.SORT,
+      rows:    sorted,
+      sortCol: sortCol,
+      sortDir: sortDir,
     });
   },
 };

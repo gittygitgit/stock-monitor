@@ -7,6 +7,7 @@ import TextCell from './TextCell'
 import StockMonitorCell from './StockMonitorCell'
 import FirmApi from '../api/FirmApi'
 import SQFGridHeaderCell from './SQFGridHeaderCell'
+import SortDir from './SortDir';
 
 class SQFGrid extends React.Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class SQFGrid extends React.Component {
         let e = this.firmApi.firmEvent();
         this.props.actions.firmEvent(e);
       },
-      1000 
+      500 
     );
   }
 
@@ -47,8 +48,8 @@ class SQFGrid extends React.Component {
     //console.log("SQFGrid::componentWillUpdate");
   }
 
-  _onSortChange(colKey) {
-    console.log("SQFGrid::onSort [colKey=%s]", colKey);
+  _onSortChange(colKey, colDir) {
+    console.log("SQFGrid::onSort [colKey=%s, colDir=%s]", colKey, colDir);
     
     console.log(this.props.firms);
     let sorted = this.props.firms.sortBy(
@@ -57,17 +58,22 @@ class SQFGrid extends React.Component {
         return v.get(colKey); 
       },
       (a, b) => {
+        let result = 0;
         if ( a < b ) {
-          return -1; 
+          result = -1; 
         } else if ( a == b ) {
-          return 0;
+          result = 0;
         } else {
-          return 1;
+          result = 1;
         }
+        if (result !== 0 && colDir === SortDir.DESC) {
+          result *= -1;
+        }
+        return result;
       }
     ); 
     console.log(sorted); 
-    this.props.actions.sort(sorted);
+    this.props.actions.sort(sorted, colKey, colDir);
   }
 
   render() {
@@ -92,14 +98,14 @@ class SQFGrid extends React.Component {
         headerHeight={30} >
         <Column
           columnKey="last"
-          header={<SQFGridHeaderCell onSortChange={this._onSortChange}>Last</SQFGridHeaderCell>}
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("last")}>Last</SQFGridHeaderCell>}
           cell={
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="last" width={100} {...this.props}></StockMonitorCell>)
           }
           width={100} />
         <Column
           columnKey="firm"
-          header={<SQFGridHeaderCell onSortChange={this._onSortChange}>Grp</SQFGridHeaderCell>}
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("firm")}>Grp</SQFGridHeaderCell>}
           cell={
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="firm" width={75} {...this.props}></StockMonitorCell>)
           }

@@ -7,11 +7,16 @@ import {ReduceStore} from 'flux/utils';
 import AppDispatcher from '../AppDispatcher'
 import Immutable, {Map, fromJS} from 'immutable';
 import FirmApi from '../api/FirmApi'
+import SortDir from '../components/SortDir'
 const moment = require('moment');
 //_groupList.push({firm: "GSM1", last:'08:47:07.796'});
 //_groupList.push({firm: "WOL1", last:'00:00:00.000'});
 
-
+/**
+  * State:
+  * firms      - map of firmname to firm 
+  * sortInfo   - single property value, key is colName, value is asc/desc
+  */
 class FirmStore extends ReduceStore {
   constructor() {
 //    console.log("FirmStore::ctor");
@@ -20,7 +25,8 @@ class FirmStore extends ReduceStore {
 
   getInitialState() {
     return Immutable.fromJS({
-      firms: Map()
+      firms: Map(),
+      sortInfo: {last:SortDir.ASC},
     })
     //return Map();
   }
@@ -33,7 +39,7 @@ class FirmStore extends ReduceStore {
         let firms = FirmApi.getFirms();
         return state.mergeDeep(
           fromJS({
-            "firms": firms
+            "firms":   firms,
           })
         );
       case ActionTypes.ADD_FIRM:
@@ -67,10 +73,14 @@ class FirmStore extends ReduceStore {
         );
       case ActionTypes.SORT:
         console.log("FirmStore::reduce [actionType=SORT]");
+        console.log("sortCol=%s, sortDir=%s", action.sortCol, action.sortDir);
         console.log(state);
-        let sorted=action.sorted;
+        let sorted=action.rows;
         console.log(sorted);
-        return state.set("firms", sorted);
+        let sortCol = action.sortCol;
+        let sortDir = action.sortDir;
+        return state.set("firms", sorted).set("sortInfo", Map({ [sortCol]:sortDir }));
+
       default:
         return state;
     }

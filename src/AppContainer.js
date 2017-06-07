@@ -15,7 +15,8 @@ class AppContainer extends React.Component {
     //console.log("AppContainer::calculateState");
     console.log(FirmStore.getState());
     return {
-      firms: FirmStore.getState().get("firms"),
+      firms:        FirmStore.getState().get("firms"),
+      sortInfo:     FirmStore.getState().get("sortInfo"),
       actions: {
         initialize: Actions.initialize,
         addFirm:    Actions.addFirm,
@@ -27,7 +28,7 @@ class AppContainer extends React.Component {
 
   render() {
     //console.log("AppContainer::render");
-    return ( <AppView firms={this.state.firms} actions={this.state.actions}></AppView> );
+    return ( <AppView firms={this.state.firms} actions={this.state.actions} sortInfo={this.state.sortInfo}></AppView> );
   }
 }
 export default Container.create(AppContainer);
