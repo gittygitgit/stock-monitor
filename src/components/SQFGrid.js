@@ -89,7 +89,7 @@ class SQFGrid extends React.Component {
       <Table
         rowsCount={this.props.firms.size}
         rowHeight={30}
-        width={1100}
+        width={1300}
         height={500}
         allowCellsRecycling={true}
         rowClassNameGetter={
@@ -109,85 +109,85 @@ class SQFGrid extends React.Component {
           cell={
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="firm" width={75} {...this.props}></StockMonitorCell>)
           }
-          width={75} />
-        <Column
-          header={<Cell>Blk</Cell>}
+          width={100} />
+        <Column columnKey="numBlocks"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("numBlocks")}>Blk</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="numBlocks" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="numBlocks" width={100} {...this.props}></StockMonitorCell>)
           }
           width={75} /> 
-        <Column
-          header={<Cell>Curr R</Cell>}
+        <Column columnKey="rateCurrent"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("rateCurrent")}>Curr R</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rateCurrent" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rateCurrent" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>1min R</Cell>}
+          width={100} /> 
+        <Column columnKey="rate1Min"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("rate1Min")}>1min R</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rate1Min" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rate1Min" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>5min R</Cell>}
+          width={100} /> 
+        <Column columnKey="rate5min"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("rate5min")}>5min R</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rate5Min" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rate5Min" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>Curr QL</Cell>}
+          width={100} /> 
+        <Column columnKey="qlCurrent"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("qlCurrent")}>Curr QL</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="qlCurrent" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="qlCurrent" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>1min QL</Cell>}
+          width={100} /> 
+        <Column columnKey="ql1Min"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("ql1Min")}>1min QL</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ql1Min" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ql1Min" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>Curr L</Cell>}
+          width={100} /> 
+        <Column columnKey="limitCurrent"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("limitCurrent")}>Curr L</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="limitCurrent" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="limitCurrent" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>1min L</Cell>}
+          width={100} /> 
+        <Column columnKey="limit1Min"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("limit1Min")}>1min L</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="limit1Min" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="limit1Min" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>5min L</Cell>}
+          width={100} /> 
+        <Column columnKey="limit5Min"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("limit5Min")}>5min L</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="limit5Min" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="limit5Min" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>Quotes</Cell>}
+          width={100} /> 
+        <Column columnKey="quotes"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("quotes")}>Quotes</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="quotes" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="quotes" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>Blocks</Cell>}
+          width={100} /> 
+        <Column columnKey="blocks"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("blocks")}>Blocks</SQFGridHeaderCell >}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="blocks" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="blocks" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>Purges</Cell>}
+          width={100} /> 
+        <Column columnKey="purges"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("purges")}>Purges</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="purges" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="purges" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
-        <Column
-          header={<Cell>UndPurges</Cell>}
+          width={100} /> 
+        <Column columnKey="undPurges"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("undPurges")}>UndPurges</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="undPurges" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="undPurges" width={100} {...this.props}></StockMonitorCell>)
           }
-          width={75} /> 
+          width={100} /> 
       </Table>
     );
   }
