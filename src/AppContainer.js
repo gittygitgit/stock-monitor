@@ -17,6 +17,11 @@ class AppContainer extends React.Component {
     return {
       firms:        FirmStore.getState().get("firms"),
       sortInfo:     FirmStore.getState().get("sortInfo"),
+      last:         FirmStore.getState().get("last"),
+      totQuotes:    FirmStore.getState().get("totQuotes"),
+      totBlocks:    FirmStore.getState().get("totBlocks"),
+      totPurges:    FirmStore.getState().get("totPurges"),
+      totUndPurges: FirmStore.getState().get("totUndPurges"),
       actions: {
         initialize: Actions.initialize,
         addFirm:    Actions.addFirm,
@@ -26,9 +31,9 @@ class AppContainer extends React.Component {
     };
   }
 
-  render() {
+  render(props) {
     //console.log("AppContainer::render");
-    return ( <AppView firms={this.state.firms} actions={this.state.actions} sortInfo={this.state.sortInfo}></AppView> );
+    return ( <AppView firms={this.state.firms} actions={this.state.actions} sortInfo={this.state.sortInfo} last={this.state.last} totQuotes={this.state.totQuotes} totBlocks={this.state.totBlocks} totPurges={this.state.totPurges} totUndPurges={this.state.totUndPurges}></AppView> );
   }
 }
 export default Container.create(AppContainer);

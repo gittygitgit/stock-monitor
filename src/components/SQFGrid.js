@@ -5,14 +5,12 @@ const {Table, Column, Cell} = require('fixed-data-table-2')
 import FirmStore from '../stores/FirmStore'
 import TextCell from './TextCell'
 import StockMonitorCell from './StockMonitorCell'
-import FirmApi from '../api/FirmApi'
 import SQFGridHeaderCell from './SQFGridHeaderCell'
 import SortDir from './SortDir';
 
 class SQFGrid extends React.Component {
   constructor(props) {
     super(props);
-    this.firmApi = FirmApi;
     this.changeStyle = {
       background: 'red'
     };
@@ -21,13 +19,6 @@ class SQFGrid extends React.Component {
 
   componentDidMount() {
     console.log("SQFGrid::componentDidMount");
-    this.timerId = setInterval(
-      () => {
-        let e = this.firmApi.firmEvent();
-        this.props.actions.firmEvent(e);
-      },
-      500 
-    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -89,7 +80,7 @@ class SQFGrid extends React.Component {
       <Table
         rowsCount={this.props.firms.size}
         rowHeight={30}
-        width={1300}
+        width={1100}
         height={500}
         allowCellsRecycling={true}
         rowClassNameGetter={

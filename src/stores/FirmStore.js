@@ -27,6 +27,12 @@ class FirmStore extends ReduceStore {
     return Immutable.fromJS({
       firms: Map(),
       sortInfo: {last:SortDir.ASC},
+      last: '',
+      totQuotes: 0,
+      totBlocks: 0,
+      totPurges: 0,
+      totUndPurges: 0,
+
     })
     //return Map();
   }
@@ -66,9 +72,20 @@ class FirmStore extends ReduceStore {
 //          console.log("state changed"); 
             next = next.set(event.firm, next.get(event.firm).set("changed", true));
         }
+       
+        let totQuotes = parseInt(state.get("totQuotes")) + event.quotes;
+        let totBlocks = parseInt(state.get("totBlocks")) + event.blocks;
+        let totPurges = parseInt(state.get("totPurges")) + event.purges;
+        let totUndPurges= parseInt(state.get("totUndPurges")) + event.undPurges;
+
         return state.mergeDeep(
           fromJS({
-            "firms":next
+            "firms":next,
+            "last": event.last,
+            "totQuotes": totQuotes,
+            "totBlocks": totBlocks,
+            "totPurges": totPurges,
+            "totUndPurges": totUndPurges,
           })
         );
       case ActionTypes.SORT:
