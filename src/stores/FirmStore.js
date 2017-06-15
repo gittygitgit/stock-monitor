@@ -5,16 +5,25 @@ var assign = require('object-assign');
 import ActionTypes from '../actions/ActionTypes';
 import {ReduceStore} from 'flux/utils';
 import AppDispatcher from '../AppDispatcher'
-import Immutable, {Map, fromJS} from 'immutable';
+import Immutable, {Map, List, fromJS} from 'immutable';
 import FirmApi from '../api/FirmApi'
+import FirmDetail from '../api/FirmDetail'
 import SortDir from '../components/SortDir'
 const moment = require('moment');
-//_groupList.push({firm: "GSM1", last:'08:47:07.796'});
-//_groupList.push({firm: "WOL1", last:'00:00:00.000'});
 
 /**
   * State:
-  * firms      - map of firmname to firm 
+  * firms        - Map of firms, portFirmId => PortFirm
+  * firmDetails  - Map of firm details, firm => firmDetail
+  * fortInfo
+  * last
+  * totQuotes
+  * totBlocks
+  * totPurges
+  * totUndPurges
+  *  
+
+map of firmname to firm 
   * sortInfo   - single property value, key is colName, value is asc/desc
   */
 class FirmStore extends ReduceStore {
@@ -26,6 +35,7 @@ class FirmStore extends ReduceStore {
   getInitialState() {
     return Immutable.fromJS({
       firms: Map(),
+      firmDetails: Map(),
       sortInfo: {last:SortDir.ASC},
       last: '',
       totQuotes: 0,
@@ -39,13 +49,84 @@ class FirmStore extends ReduceStore {
  
   reduce(state, action) {
  //   console.log("FirmStore::reduce");
-    switch (action.type) {
+   switch (action.type) {
       case ActionTypes.INITIALIZE:
         console.log("INITIALIZE");
-        let firms = FirmApi.getFirms();
+        debugger;
+        // Get all portFirms
+        //let firms = FirmApi.spinPortFirms().map(f => Map(f.id, f));
+        // portFirm id => PortFirm
+        let idToFirmPortMap = Map();
+        // firmname => FirmDetail
+        let firmToFirmTotalsMap = Map();
+        // firmname => FirmDetail
+        let firmToPortTotalsMap = Map();
+
+
+        let portList;
+        FirmApi.spinPortFirms().forEach(pf => { 
+          let firmName = pf.get("name");
+          idToFirmPortMap = idToFirmPortMap.set(pf.get("id"), pf);
+          let detail = null;
+          if (!firmToFirmTotalsMap.has(firmName)) {
+            detail = fromJS({
+              last:'',
+              firm:firmName,
+              port:'',
+              ring:'',
+              numBlocks:0, 
+              rateCurrent:0, 
+              rate1Min:0, 
+              rate5Min:0, 
+              qlCurrent:0, 
+              ql1Min:0, 
+              limitCurrent:0, 
+              limit1Min:0, 
+              limit5Min:0, 
+              quotes:0, 
+              blocks:0, 
+              purges:0, 
+              undPurges:0});
+            firmToFirmTotalsMap = firmToFirmTotalsMap.set(
+              firmName, detail
+            );
+          } 
+          
+          debugger;   
+          portList = firmToPortTotalsMap.get(firmName);
+          if (portList === undefined) {
+            portList = List();
+          }
+          portList = portList.push(
+            fromJS(
+	      '',
+	      firmName,
+	      pf.get("portName"),
+	      pf.get("ring"), 
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0,
+	      0
+            )
+          );
+    
+        });
+
+        firmToPortTotalsMap = firmToPortTotalsMap.set(firmName, portList);
+
+
         return state.mergeDeep(
           fromJS({
-            "firms":   firms,
+            "firms":       firmToFirmTotalsMap,
+            "firmDetails": firmToPortTotalsMap
           })
         );
       case ActionTypes.ADD_FIRM:

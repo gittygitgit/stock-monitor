@@ -76,6 +76,7 @@ class SQFGrid extends React.Component {
       return null;
     }
     let rows = this.props.firms.toIndexedSeq();
+    debugger;
     return (
       <Table
         rowsCount={this.props.firms.size}

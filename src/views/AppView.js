@@ -26,7 +26,7 @@ class AppView extends React.Component {
         let e = this.firmApi.firmEvent();
         this.props.actions.firmEvent(e);
       },
-      500
+      300
     );
   }
 

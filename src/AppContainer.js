@@ -14,6 +14,7 @@ class AppContainer extends React.Component {
   static calculateState(prevState) {
     //console.log("AppContainer::calculateState");
     console.log(FirmStore.getState());
+    debugger;
     return {
       firms:        FirmStore.getState().get("firms"),
       sortInfo:     FirmStore.getState().get("sortInfo"),
