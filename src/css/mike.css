@@ -2,7 +2,7 @@ body {
   font-size: 12px;
 }
 
-.container-fluid {
+div .container-fluid {
   padding-left: 0px;
 }
 
@@ -51,11 +51,14 @@ body {
 }
 
 div .port-modal {
-  color: yellow;
+  color: navy;
   width: 95%;
   height: 95%
 }
 
+div .modal-content {
+  height: 95%
+}
 div .modal-body {
   width: 100%
 }

@@ -31,7 +31,7 @@ class SQFMainDash extends React.Component {
           dialogClassName="port-modal"
 	>
 	  <Modal.Header closeButton>
-	    <Modal.Title id="contained-modal-title">Ports</Modal.Title>
+	    <Modal.Title id="contained-modal-title">Port Group: {this.props.selectedGroup}</Modal.Title>
 	  </Modal.Header>
 	  <Modal.Body>
 	    <SQFPortGrid portList={this.props.ports.valueSeq()} {...this.props}></SQFPortGrid>
