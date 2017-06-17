@@ -2,7 +2,9 @@ const ActionTypes = {
   INITIALIZE: 'INITIALIZE',
   ADD_FIRM: 'ADD_FIRM',
   FIRM_EVENT: 'FIRM_EVENT',
-  SORT: 'SORT'
+  SORT: 'SORT',
+  CLICK_GROUP_ROW: 'CLICK_GROUP_ROW',
+  CLOSE_PORTS: 'CLOSE_PORTS',
 };
 
 export default ActionTypes;

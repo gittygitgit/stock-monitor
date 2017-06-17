@@ -17,8 +17,7 @@ class SummaryTotals extends React.Component {
   }
 
   render(props) {
-    console.log("SummaryTotals::render");
-    console.log(this.props);
+    //console.log("SummaryTotals::render");
     const {last} = this.props.last;
     return (
       <div>

@@ -46,13 +46,13 @@ class FirmApi {
 
   firmEvent() {
     let randIdx = Math.floor(Math.random() * (this.portFirms.count()));
-    let f = this.portFirms.get(randIdx).get("name");
-    //let evt = {name: f, last:moment().format('hh:mm:ss.SSS')};
+    let groupPort = this.portFirms.get(randIdx);
+
     let evt = {
       last: moment().format('hh:mm:ss.SSS'), // last
-      firm:f,
-      port:'',
-      ring:'',
+      firm: groupPort.get("name"),
+      port: groupPort.get("port"),
+      ring: groupPort.get("ring"),
       numBlocks:this.randInt(0, 10),             // blocks
       rateCurrent:.08,
       rate1Min:.11,
@@ -78,7 +78,6 @@ class FirmApi {
   }
   
   spinPortFirms() {
-    debugger;
     return this.portFirms;
   }
 }

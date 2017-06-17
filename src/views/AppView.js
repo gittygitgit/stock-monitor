@@ -1,9 +1,7 @@
 import React from 'react';
-import SQFGrid from '../components/SQFGrid';
-const {Table, Column, Cell} = require('fixed-data-table-2');
+import SQFMainDash from '../components/SQFMainDash';
 import SideBar from '../components/SideBar';
 import FirmApi from '../api/FirmApi'
-
 class AppView extends React.Component {
 
   constructor(props) {
@@ -21,6 +19,7 @@ class AppView extends React.Component {
 
   componentDidMount() {
     this.props.actions.initialize(); 
+//    this.props.actions.clickGroupRow(2);
     this.timerId = setInterval(
       () => {
         let e = this.firmApi.firmEvent();
@@ -34,9 +33,9 @@ class AppView extends React.Component {
     console.log("AppView::render");
     return (
     <div id="wrapper">
-      <SideBar last={this.props.last} totQuotes={this.props.totQuotes} totBlocks={this.props.totBlocks} totPurges={this.props.totPurges} totUndPurges={this.props.totUndPurges}/>
       <div id="page-content-wrapper" className="container-fluid" style={this.style}>
-        <SQFGrid width={800} {...this.props}></SQFGrid>
+        <SQFMainDash width={800} {...this.props}></SQFMainDash>
+        <SideBar last={this.props.last} totQuotes={this.props.totQuotes} totBlocks={this.props.totBlocks} totPurges={this.props.totPurges} totUndPurges={this.props.totUndPurges}/>
       </div>
     </div>
     );

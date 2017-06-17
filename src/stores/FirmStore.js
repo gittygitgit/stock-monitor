@@ -13,15 +13,15 @@ const moment = require('moment');
 
 /**
   * State:
-  * firms        - Map of firms, portFirmId => PortFirm
-  * firmDetails  - Map of firm details, firm => firmDetail
-  * fortInfo
-  * last
-  * totQuotes
-  * totBlocks
-  * totPurges
-  * totUndPurges
-  *  
+  * firms            - Map of firms, portFirmId => PortFirm
+  * firmDetails      - Map of firm details, firm => firmDetail
+  * ports - Map of port to port totals for a selected firm, port => ???
+  * last             - Timestamp of last update received
+  * totQuotes        - Total number of quotes for all groups
+  * totBlocks        - Total number of blocks for all groups
+  * totPurges        - Total number of purges for all groups
+  * totUndPurges     - Total number of undPurges for all groups
+  * selectedGroup    - Group selected
 
 map of firmname to firm 
   * sortInfo   - single property value, key is colName, value is asc/desc
@@ -35,6 +35,7 @@ class FirmStore extends ReduceStore {
   getInitialState() {
     return Immutable.fromJS({
       firms: Map(),
+      ports: Map(),
       firmDetails: Map(),
       sortInfo: {last:SortDir.ASC},
       last: '',
@@ -42,7 +43,7 @@ class FirmStore extends ReduceStore {
       totBlocks: 0,
       totPurges: 0,
       totUndPurges: 0,
-
+      selectedGroup: '',
     })
     //return Map();
   }
@@ -63,70 +64,76 @@ class FirmStore extends ReduceStore {
         let firmToPortTotalsMap = Map();
 
 
-        let portList;
+        let portMap;
         FirmApi.spinPortFirms().forEach(pf => { 
           let firmName = pf.get("name");
           idToFirmPortMap = idToFirmPortMap.set(pf.get("id"), pf);
           let detail = null;
           if (!firmToFirmTotalsMap.has(firmName)) {
             detail = fromJS({
-              last:'',
-              firm:firmName,
-              port:'',
-              ring:'',
-              numBlocks:0, 
-              rateCurrent:0, 
-              rate1Min:0, 
-              rate5Min:0, 
-              qlCurrent:0, 
-              ql1Min:0, 
-              limitCurrent:0, 
-              limit1Min:0, 
-              limit5Min:0, 
-              quotes:0, 
-              blocks:0, 
-              purges:0, 
-              undPurges:0});
+              last:         '00:00:00.000',
+              firm:         firmName,
+              port:         pf.get("port"),
+              ring:         pf.get("ring"),
+              numBlocks:    0, 
+              rateCurrent:  0, 
+              rate1Min:     0, 
+              rate5Min:     0, 
+              qlCurrent:    0, 
+              ql1Min:       0, 
+              limitCurrent: 0, 
+              limit1Min:    0, 
+              limit5Min:    0, 
+              quotes:       0, 
+              blocks:       0, 
+              purges:       0, 
+              undPurges:    0});
+
             firmToFirmTotalsMap = firmToFirmTotalsMap.set(
               firmName, detail
             );
           } 
           
-          debugger;   
-          portList = firmToPortTotalsMap.get(firmName);
-          if (portList === undefined) {
-            portList = List();
+          portMap = firmToPortTotalsMap.get(firmName);
+          if (portMap === undefined) {
+            portMap = Map();
           }
-          portList = portList.push(
-            fromJS(
-	      '',
-	      firmName,
-	      pf.get("portName"),
-	      pf.get("ring"), 
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0,
-	      0
+          let port = pf.get("port");
+          portMap = portMap.set(
+            port, fromJS(
+              {
+	        last:         '00:00:00.000',
+		firm:         firmName,
+		port:         pf.get("port"),
+		ring:         pf.get("ring"),
+		numBlocks:    0, 
+		rateCurrent:  0, 
+		rate1Min:     0, 
+		rate5Min:     0, 
+		qlCurrent:    0, 
+		ql1Min:       0, 
+		limitCurrent: 0, 
+		limit1Min:    0, 
+		limit5Min:    0, 
+		quotes:       0, 
+		blocks:       0, 
+		purges:       0, 
+		undPurges:    0,
+                changed:      false,
+              }
             )
           );
-    
+   
+          firmToPortTotalsMap = firmToPortTotalsMap.set(
+            firmName,
+            portMap
+          ) 
         });
-
-        firmToPortTotalsMap = firmToPortTotalsMap.set(firmName, portList);
-
 
         return state.mergeDeep(
           fromJS({
             "firms":       firmToFirmTotalsMap,
-            "firmDetails": firmToPortTotalsMap
+            "firmDetails": firmToPortTotalsMap,
           })
         );
       case ActionTypes.ADD_FIRM:
@@ -137,23 +144,64 @@ class FirmStore extends ReduceStore {
 //        console.log("FIRM_EVENT");
         
         // reset changed flag
-        let now  = state.get("firms");
-        now = now.map( f => f.set("changed", false));
+        let curFirms  = state.get("firms");
+        curFirms = curFirms.map( f => f.set("changed", false));
 
         let event = action.firm;
         let firmName = event.firm;
-        
-	let entry = Map().set(firmName, Map(event));
+       
+        let eventMap = Map(event); 
+	let entry = Map().set(firmName, eventMap);
 
-        let next = now.mergeDeep(
+        let nextFirms = curFirms.mergeDeep(
           entry
         );
         
-        if (!now.equals(next)) {
+        if (!curFirms.equals(nextFirms)) {
 //          console.log("state changed"); 
-            next = next.set(event.firm, next.get(event.firm).set("changed", true));
+            nextFirms = nextFirms.set(event.firm, nextFirms.get(event.firm).set("changed", true));
         }
-       
+
+        // GROUP => PORTS 
+        debugger;
+        let curGroupPortMap = state.get("firmDetails");
+        console.log("asdfas");     
+        console.log(curGroupPortMap);
+        let curPortsForFirm = curGroupPortMap.get(firmName);
+
+ 
+        entry = Map().set(           
+          event.port, 
+	  eventMap.set("changed", false)
+        );
+
+        let nextPortsForFirm = curPortsForFirm.mergeDeep(
+          entry
+        );
+
+        let nextGroupPortMap = curGroupPortMap.mergeDeep(
+          Map().set(
+            firmName,
+            nextPortsForFirm
+          )
+        );
+        
+      
+         
+        let showingPortMap = state.get("selectedGroup");
+ 
+        if (showingPortMap) {
+          // user has a firm selected
+          let selectedGroup = state.get("selectedGroup");
+
+          // update ports if user is viewing same group just updated
+          if (selectedGroup == firmName) {
+	    // update his ports w/ global cache
+	    state = state.set("ports", nextGroupPortMap.get(selectedGroup));
+          }
+        }
+
+ 
         let totQuotes = parseInt(state.get("totQuotes")) + event.quotes;
         let totBlocks = parseInt(state.get("totBlocks")) + event.blocks;
         let totPurges = parseInt(state.get("totPurges")) + event.purges;
@@ -161,7 +209,8 @@ class FirmStore extends ReduceStore {
 
         return state.mergeDeep(
           fromJS({
-            "firms":next,
+            "firms":nextFirms,
+            "firmDetails": nextGroupPortMap,
             "last": event.last,
             "totQuotes": totQuotes,
             "totBlocks": totBlocks,
@@ -178,7 +227,16 @@ class FirmStore extends ReduceStore {
         let sortCol = action.sortCol;
         let sortDir = action.sortDir;
         return state.set("firms", sorted).set("sortInfo", Map({ [sortCol]:sortDir }));
-
+      case ActionTypes.CLICK_GROUP_ROW:
+        console.log("FirmStore::reduce [actionType=CLICK_GROUP_ROW]");
+	let sequencedGroups = state.get("firms").keySeq();
+	let selectedGroup = sequencedGroups.get(action.rowIndex);
+        console.log("selectedfirm - %s", selectedGroup); 
+        portMap = state.get("firmDetails").get(selectedGroup);         
+        state = state.set("selectedGroup", sequencedGroups.get(action.rowIndex));
+        return state = state.set("ports", portMap);
+      case ActionTypes.CLOSE_PORTS:
+        return state.set("selectedGroup", '').set("ports", Map());
       default:
         return state;
     }

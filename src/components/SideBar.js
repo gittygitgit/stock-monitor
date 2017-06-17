@@ -4,12 +4,11 @@ import SummaryTotals from './SummaryTotals';
 
 function SideBar(props) {
   const wellStyles = {
-    maxWidth: 400, 
     width: 300,
     margin: '0 auto 10px', 
     position: 'fixed',
-    zIndex: 1000,
-    left: 1140 
+    left: 1140,
+    top: 0
   };
 
   return (

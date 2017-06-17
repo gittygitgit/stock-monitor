@@ -32,6 +32,19 @@ const Actions = {
       sortDir: sortDir,
     });
   },
+  clickGroupRow(rowIndex) {
+    console.log("Actions::clickGroupRow [rowIndex=%s], rowIndex");
+    AppDispatcher.dispatch({
+      type: ActionTypes.CLICK_GROUP_ROW,
+      rowIndex:  rowIndex,
+    });
+  },
+  onClosePorts() {
+    console.log("Actions::onClosePorts");
+    AppDispatcher.dispatch({
+      type: ActionTypes.CLOSE_PORTS,
+    });
+  }
 };
 
 export default Actions;

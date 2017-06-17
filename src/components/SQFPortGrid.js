@@ -8,7 +8,7 @@ import StockMonitorCell from './StockMonitorCell'
 import SQFGridHeaderCell from './SQFGridHeaderCell'
 import SortDir from './SortDir';
 
-class SQFGrid extends React.Component {
+class SQFPortGrid extends React.Component {
   constructor(props) {
     super(props);
     this.changeStyle = {
@@ -18,43 +18,14 @@ class SQFGrid extends React.Component {
   }
 
   componentDidMount() {
-    console.log("SQFGrid::componentDidMount");
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    
-    console.log("SQFGrid::shouldComponentUpdate=");
-    console.log(nextProps);
-    if (nextProps.selectedGroup) {
-      console.log("SQFGrid::shouldComponentUpdate=false");
-      return false;
-    }
-    return true;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    //console.log("SQFGrid::componentWillReceiveProps");
-    let now     = this.props.firms;
-    let next    = nextProps.firms;
-
-    for (let k of now.keys()) {
-      //detect changed firms
-      if (!now.get(k).equals(next.get(k))) {
-//        console.log(k + " changed.");
-        
-      }
-    }
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    //console.log("SQFGrid::componentWillUpdate");
+    console.log("SQFPortGrid::componentDidMount");
   }
 
   _onSortChange(colKey, colDir) {
-    console.log("SQFGrid::onSort [colKey=%s, colDir=%s]", colKey, colDir);
+    console.log("SQFPortGrid::onSort [colKey=%s, colDir=%s]", colKey, colDir);
     
-    console.log(this.props.firms);
-    let sorted = this.props.firms.sortBy(
+    console.log(this.props.ports);
+    let sorted = this.props.portList.sortBy(
       (v, k) => {
         console.log(v.get(colKey));
         return v.get(colKey); 
@@ -78,29 +49,23 @@ class SQFGrid extends React.Component {
     this.props.actions.sort(sorted, colKey, colDir);
   }
 
-  openPortGrid(e, index) {
-    console.log(index);
- 
-    this.props.actions.clickGroupRow(index);
-  }
-
   render() {
-    //console.log("SQFGrid::render");
-    if (this.props.firms == null) {
+    console.log("SQFPortGrid::render");
+    debugger;
+    if (this.props.portList== null) {
       return null;
     }
-    if (this.props.firms.size === 0) {
+    if (this.props.portList.size === 0) {
       return null;
     }
-    let rows = this.props.firms.toIndexedSeq();
+    let rows = this.props.portList;
     return (
       <Table
-        rowsCount={this.props.firms.size}
+        rowsCount={this.props.portList.size}
         rowHeight={30}
         width={1100}
         height={500}
         allowCellsRecycling={true}
-        onRowClick={(e, index) => this.openPortGrid(e, index)}
         rowClassNameGetter={
           (index) => "myrow"
         }
@@ -113,10 +78,17 @@ class SQFGrid extends React.Component {
           }
           width={100} />
         <Column
-          columnKey="firm"
-          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("firm")}>Grp</SQFGridHeaderCell>}
+          columnKey="port"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("port")}>Port</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="firm" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="port" width={75} {...this.props}></StockMonitorCell>)
+          }
+          width={100} />
+        <Column
+          columnKey="ring"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.sortInfo.get("ring")}>Ring</SQFGridHeaderCell>}
+          cell={
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ring" width={75} {...this.props}></StockMonitorCell>)
           }
           width={100} />
         <Column columnKey="numBlocks"
@@ -202,4 +174,4 @@ class SQFGrid extends React.Component {
   }
 }
 
-export default SQFGrid;
+export default SQFPortGrid;

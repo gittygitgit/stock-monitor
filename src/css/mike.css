@@ -42,3 +42,10 @@ body {
 .public_fixedDataTableCell_cellContent {
   padding: 7px
 }
+
+.modal-container {
+  position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
