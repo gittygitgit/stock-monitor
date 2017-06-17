@@ -42,10 +42,20 @@ body {
 .public_fixedDataTableCell_cellContent {
   padding: 7px
 }
-
+/* PORT MODAL */
 .modal-container {
   position: relative;
 }
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
+}
+
+div .port-modal {
+  color: yellow;
+  width: 95%;
+  height: 95%
+}
+
+div .modal-body {
+  width: 100%
 }

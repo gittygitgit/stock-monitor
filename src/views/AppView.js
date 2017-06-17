@@ -34,7 +34,7 @@ class AppView extends React.Component {
     return (
     <div id="wrapper">
       <div id="page-content-wrapper" className="container-fluid" style={this.style}>
-        <SQFMainDash width={800} {...this.props}></SQFMainDash>
+        <SQFMainDash width={1000} {...this.props}></SQFMainDash>
         <SideBar last={this.props.last} totQuotes={this.props.totQuotes} totBlocks={this.props.totBlocks} totPurges={this.props.totPurges} totUndPurges={this.props.totUndPurges}/>
       </div>
     </div>

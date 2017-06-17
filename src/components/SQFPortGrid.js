@@ -63,7 +63,7 @@ class SQFPortGrid extends React.Component {
       <Table
         rowsCount={this.props.portList.size}
         rowHeight={30}
-        width={1100}
+        width={1330}
         height={500}
         allowCellsRecycling={true}
         rowClassNameGetter={

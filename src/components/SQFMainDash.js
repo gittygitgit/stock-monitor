@@ -19,14 +19,16 @@ class SQFMainDash extends React.Component {
   render() {
     
 //    let close = () => this.props.actions.onClosePorts();
+
     return  (
-      <div>
+      <div id="foo">
 	<SQFGrid width={800} {...this.props}></SQFGrid>
 	<Modal
 	  show={this.props.selectedGroup}
 	  onHide={this.closePorts}
-	  container={this}
 	  aria-labelledby="contained-modal-title" 
+          animation={true}
+          dialogClassName="port-modal"
 	>
 	  <Modal.Header closeButton>
 	    <Modal.Title id="contained-modal-title">Ports</Modal.Title>
