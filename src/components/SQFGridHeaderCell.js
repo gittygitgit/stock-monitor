@@ -40,7 +40,7 @@ class SQFGridHeaderCell extends React.Component{
   render() {
     //console.log("SQFGridHeaderCell::render");
     var { children, sortDir, ...props } = this.props;
-    return (<Cell {...props}>
+    return (<Cell className="sortable-header" {...props}>
       <a onClick={this._onSortChange}>{children} { sortDir ? (sortDir === SortDir.ASC) ? String.fromCharCode( "9650") : String.fromCharCode("9660") : '' }</a>
     </Cell>); 
 

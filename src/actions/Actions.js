@@ -27,7 +27,7 @@ const Actions = {
   clickGroupRow(rowIndex) {
     console.log("Actions::clickGroupRow [rowIndex=%s], rowIndex");
     AppDispatcher.dispatch({
-      type: ActionTypes.CLICK_GROUP_ROW,
+      type: ActionTypes.ON_SELECT_GROUP,
       rowIndex:  rowIndex,
     });
   },

@@ -1,7 +1,9 @@
+/*** GENERAL       ***/
 body {
   font-size: 12px;
 }
 
+/*** BOOTSTRAP     ***/
 div .container-fluid {
   padding-left: 0px;
 }
@@ -10,6 +12,8 @@ div .container-fluid {
   padding-left: 0px
 }
 
+
+/*** TABLES        ***/
 .active-row {
   background-color: navy;
   display:table-cell
@@ -24,6 +28,14 @@ div .container-fluid {
   border-bottom-width: 1px;
   border-top-style: none;
   display:table-row
+}
+
+.group-row {
+  cursor: pointer
+}
+
+.sortable-header {
+  cursor: pointer
 }
 
 .mycell {
@@ -42,10 +54,12 @@ div .container-fluid {
 .public_fixedDataTableCell_cellContent {
   padding: 7px
 }
-/* PORT MODAL */
+
+/*** PORT MODAL     ***/
 .modal-container {
   position: relative;
 }
+
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
 }
@@ -59,6 +73,7 @@ div .port-modal {
 div .modal-content {
   height: 95%
 }
+
 div .modal-body {
   width: 100%
 }

@@ -15,6 +15,7 @@ class SQFPortGrid extends React.Component {
       background: 'red'
     };
     this._onSortChange = this._onSortChange.bind(this);
+    this._rowClassNameGetter = this._rowClassNameGetter.bind(this);
   }
 
   componentDidMount() {
@@ -49,6 +50,10 @@ class SQFPortGrid extends React.Component {
     this.props.actions.sort(sorted, colKey, colDir);
   }
 
+  _rowClassNameGetter(rowindex) {
+    return 'myrow';
+  }
+
   render() {
     console.log("SQFPortGrid::render");
     debugger;
@@ -66,9 +71,7 @@ class SQFPortGrid extends React.Component {
         width={1330}
         height={500}
         allowCellsRecycling={true}
-        rowClassNameGetter={
-          (index) => "myrow"
-        }
+        rowClassNameGetter={this._rowClassNameGetter}
         headerHeight={30} >
         <Column
           columnKey="last"

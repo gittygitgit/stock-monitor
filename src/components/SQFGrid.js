@@ -15,6 +15,7 @@ class SQFGrid extends React.Component {
       background: 'red'
     };
     this._onSortChange = this._onSortChange.bind(this);
+    this._rowClassNameGetter = this._rowClassNameGetter.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +85,10 @@ class SQFGrid extends React.Component {
     this.props.actions.clickGroupRow(index);
   }
 
+  _rowClassNameGetter(rowindex) {
+    return 'myrow group-row';
+  }
+
   render() {
     //console.log("SQFGrid::render");
     if (this.props.groups== null) {
@@ -101,9 +106,7 @@ class SQFGrid extends React.Component {
         height={700}
         allowCellsRecycling={true}
         onRowClick={(e, index) => this.openPortGrid(e, index)}
-        rowClassNameGetter={
-          (index) => "myrow"
-        }
+        rowClassNameGetter={this._rowClassNameGetter}
         headerHeight={30} >
         <Column
           columnKey="last"

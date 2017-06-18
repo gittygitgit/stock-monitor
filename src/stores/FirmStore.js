@@ -18,9 +18,7 @@ const moment = require('moment');
   * portsForSelectedGroup  - Map of port to port totals for a selected firm, port => ???
   * groupSummaryInfo       - Map of summary info across firms
   * selectedGroup          - Group selected
-
-map of firmname to firm 
-  * sortInfo   - single property value, key is colName, value is asc/desc
+  * sortInfo               - single property value, key is colName, value is asc/desc
   */
 class FirmStore extends ReduceStore {
   constructor() {
@@ -223,8 +221,8 @@ class FirmStore extends ReduceStore {
         let sortCol = action.sortCol;
         let sortDir = action.sortDir;
         return state.set("groupMap", sorted).set("sortInfo", Map({ [sortCol]:sortDir }));
-      case ActionTypes.CLICK_GROUP_ROW:
-        console.log("FirmStore::reduce [actionType=CLICK_GROUP_ROW]");
+      case ActionTypes.ON_SELECT_GROUP:
+        console.log("FirmStore::reduce [actionType=ON_SELECT_GROUP]");
 	let sequencedGroups = state.get("groupMap").keySeq();
 	let selectedGroup = sequencedGroups.get(action.rowIndex);
         console.log("selectedfirm - %s", selectedGroup); 
