@@ -18,11 +18,7 @@ class AppContainer extends React.Component {
       firms:             FirmStore.getState().get("firms"),
       ports:             FirmStore.getState().get("ports"),
       sortInfo:          FirmStore.getState().get("sortInfo"),
-      last:              FirmStore.getState().get("last"),
-      totQuotes:         FirmStore.getState().get("totQuotes"),
-      totBlocks:         FirmStore.getState().get("totBlocks"),
-      totPurges:         FirmStore.getState().get("totPurges"),
-      totUndPurges:      FirmStore.getState().get("totUndPurges"),
+      summaryInfo:       FirmStore.getState().get("summaryInfo"),
       selectedGroup:     FirmStore.getState().get("selectedGroup"),
       actions: {
         initialize:      Actions.initialize,
@@ -37,7 +33,7 @@ class AppContainer extends React.Component {
 
   render(props) {
     //console.log("AppContainer::render");
-    return ( <AppView firms={this.state.firms} ports={this.state.ports} actions={this.state.actions} sortInfo={this.state.sortInfo} last={this.state.last} totQuotes={this.state.totQuotes} totBlocks={this.state.totBlocks} totPurges={this.state.totPurges} totUndPurges={this.state.totUndPurges} selectedGroup={this.state.selectedGroup}></AppView> );
+    return ( <AppView firms={this.state.firms} ports={this.state.ports} actions={this.state.actions} sortInfo={this.state.sortInfo} summaryInfo={this.state.summaryInfo} selectedGroup={this.state.selectedGroup}></AppView> );
   }
 }
 export default Container.create(AppContainer);

@@ -15,12 +15,8 @@ const moment = require('moment');
   * State:
   * firms            - Map of firms, portFirmId => PortFirm
   * firmDetails      - Map of firm details, firm => firmDetail
-  * ports - Map of port to port totals for a selected firm, port => ???
-  * last             - Timestamp of last update received
-  * totQuotes        - Total number of quotes for all groups
-  * totBlocks        - Total number of blocks for all groups
-  * totPurges        - Total number of purges for all groups
-  * totUndPurges     - Total number of undPurges for all groups
+  * ports            - Map of port to port totals for a selected firm, port => ???
+  * summaryInfo      - Map of summary info across firms
   * selectedGroup    - Group selected
 
 map of firmname to firm 
@@ -38,14 +34,14 @@ class FirmStore extends ReduceStore {
       ports: Map(),
       firmDetails: Map(),
       sortInfo: {last:SortDir.ASC},
-      last: '',
-      totQuotes: 0,
-      totBlocks: 0,
-      totPurges: 0,
-      totUndPurges: 0,
+      summaryInfo: Map()
+        .set("last", "00:00:00.000")
+        .set("totQuotes", 0)
+        .set("totBlocks", 0)
+        .set("totPurges", 0)
+        .set("totUndPurges", 0),
       selectedGroup: '',
     })
-    //return Map();
   }
  
   reduce(state, action) {
@@ -201,21 +197,25 @@ class FirmStore extends ReduceStore {
           }
         }
 
- 
-        let totQuotes = parseInt(state.get("totQuotes")) + event.quotes;
-        let totBlocks = parseInt(state.get("totBlocks")) + event.blocks;
-        let totPurges = parseInt(state.get("totPurges")) + event.purges;
-        let totUndPurges= parseInt(state.get("totUndPurges")) + event.undPurges;
+        let summaryInfo = state.get("summaryInfo");
+
+        let totQuotes = parseInt(summaryInfo.get("totQuotes")) + event.quotes;
+        let totBlocks = parseInt(summaryInfo.get("totBlocks")) + event.blocks;
+        let totPurges = parseInt(summaryInfo.get("totPurges")) + event.purges;
+        let totUndPurges= parseInt(summaryInfo.get("totUndPurges")) + event.undPurges;
+
+        state = state.set("summaryInfo", Map()
+              .set("last", event.last)
+              .set("totQuotes", totQuotes)
+              .set("totBlocks", totBlocks)
+              .set("totPurges", totPurges)
+              .set("totUndPurges", totUndPurges)
+        );
 
         return state.mergeDeep(
           fromJS({
             "firms":nextFirms,
             "firmDetails": nextGroupPortMap,
-            "last": event.last,
-            "totQuotes": totQuotes,
-            "totBlocks": totBlocks,
-            "totPurges": totPurges,
-            "totUndPurges": totUndPurges,
           })
         );
       case ActionTypes.SORT:

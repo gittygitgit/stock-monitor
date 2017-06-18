@@ -18,14 +18,14 @@ class SummaryTotals extends React.Component {
 
   render(props) {
     //console.log("SummaryTotals::render");
-    const {last} = this.props.last;
+    const {summaryInfo} = this.props;
     return (
       <div>
-	<div>Last: {this.props.last}</div>
-	<div>Quotes: {this.props.totQuotes}</div>
-	<div>Blocks: {this.props.totBlocks}</div>
-	<div>Purges: {this.props.totPurges}</div>
-	<div>Und Purges: {this.props.totUndPurges}</div>
+	<div>Last: {summaryInfo.get("last")}</div>
+	<div>Quotes: {summaryInfo.get("totQuotes")}</div>
+	<div>Blocks: {summaryInfo.get("totBlocks")}</div>
+	<div>Purges: {summaryInfo.get("totPurges")}</div>
+	<div>Und Purges: {summaryInfo.get("totUndPurges")}</div>
       </div>
     );
 

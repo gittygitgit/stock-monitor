@@ -11,6 +11,7 @@ function SideBar(props) {
     top: 0
   };
 
+
   return (
     <div className="well" style={wellStyles}>
       {
@@ -19,7 +20,7 @@ function SideBar(props) {
 	<Button bsStyle="primary" bsSize="large" block>Block level button</Button>
       */
       }
-      <SummaryTotals last={props.last} totQuotes={props.totQuotes} totBlocks={props.totBlocks} totPurges={props.totPurges} totUndPurges={props.totUndPurges}></SummaryTotals>
+      <SummaryTotals summaryInfo={props.summaryInfo}></SummaryTotals>
     </div>
   );  
 }

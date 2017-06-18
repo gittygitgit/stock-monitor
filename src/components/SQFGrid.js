@@ -98,7 +98,7 @@ class SQFGrid extends React.Component {
         rowsCount={this.props.firms.size}
         rowHeight={30}
         width={1100}
-        height={500}
+        height={700}
         allowCellsRecycling={true}
         onRowClick={(e, index) => this.openPortGrid(e, index)}
         rowClassNameGetter={
