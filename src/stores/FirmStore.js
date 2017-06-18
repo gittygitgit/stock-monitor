@@ -132,12 +132,8 @@ class FirmStore extends ReduceStore {
             "firmDetails": firmToPortTotalsMap,
           })
         );
-      case ActionTypes.ADD_FIRM:
-//        console.log("ADD_FIRM");
-        state = state.push({firm:action.firm.name, last:moment().format('hh:mm:ss.SSS')});
-        return state;
-      case ActionTypes.FIRM_EVENT:
-//        console.log("FIRM_EVENT");
+      case ActionTypes.ON_PORT_UPDATE:
+//        console.log("ON_PORT_UPDATE");
         
         // reset changed flag
         let curFirms  = state.get("firms");

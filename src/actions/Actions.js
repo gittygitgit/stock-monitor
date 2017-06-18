@@ -8,18 +8,10 @@ const Actions = {
       type: ActionTypes.INITIALIZE,
     });
   },
-  addFirm(firm) {
-    console.log("Actions::addFirm");
-    console.log(firm);
-    AppDispatcher.dispatch({
-      type: ActionTypes.ADD_FIRM,
-      firm,
-    });
-  },
   firmEvent(firm) {
 //    console.log("Actions::firmEvent");
     AppDispatcher.dispatch({
-      type: ActionTypes.FIRM_EVENT,
+      type: ActionTypes.ON_PORT_UPDATE,
       firm,
     });
   },
