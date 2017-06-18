@@ -13,11 +13,11 @@ const moment = require('moment');
 
 /**
   * State:
-  * firms            - Map of firms, portFirmId => PortFirm
-  * firmDetails      - Map of firm details, firm => firmDetail
-  * ports            - Map of port to port totals for a selected firm, port => ???
-  * summaryInfo      - Map of summary info across firms
-  * selectedGroup    - Group selected
+  * groupMap               - Map of firms, portFirmId => PortFirm
+  * groupPortMap           - Map of firm details, firm => firmDetail
+  * portsForSelectedGroup  - Map of port to port totals for a selected firm, port => ???
+  * groupSummaryInfo       - Map of summary info across firms
+  * selectedGroup          - Group selected
 
 map of firmname to firm 
   * sortInfo   - single property value, key is colName, value is asc/desc
@@ -30,11 +30,11 @@ class FirmStore extends ReduceStore {
 
   getInitialState() {
     return Immutable.fromJS({
-      firms: Map(),
-      ports: Map(),
-      firmDetails: Map(),
+      groupMap: Map(),
+      portsForSelectedGroup: Map(),
+      groupPortMap: Map(),
       sortInfo: {last:SortDir.ASC},
-      summaryInfo: Map()
+      groupSummaryInfo: Map()
         .set("last", "00:00:00.000")
         .set("totQuotes", 0)
         .set("totBlocks", 0)
@@ -51,7 +51,6 @@ class FirmStore extends ReduceStore {
         console.log("INITIALIZE");
         debugger;
         // Get all portFirms
-        //let firms = FirmApi.spinPortFirms().map(f => Map(f.id, f));
         // portFirm id => PortFirm
         let idToFirmPortMap = Map();
         // firmname => FirmDetail
@@ -61,16 +60,18 @@ class FirmStore extends ReduceStore {
 
 
         let portMap;
-        FirmApi.spinPortFirms().forEach(pf => { 
-          let firmName = pf.get("name");
-          idToFirmPortMap = idToFirmPortMap.set(pf.get("id"), pf);
+  
+        // TODO: Replace w/ callback off a core Websocket connection
+        FirmApi.spinPortFirms().forEach(port => { 
+          let firmName = port.get("name");
+          idToFirmPortMap = idToFirmPortMap.set(port.get("id"), port);
           let detail = null;
           if (!firmToFirmTotalsMap.has(firmName)) {
             detail = fromJS({
               last:         '00:00:00.000',
               firm:         firmName,
-              port:         pf.get("port"),
-              ring:         pf.get("ring"),
+              port:         port.get("port"),
+              ring:         port.get("ring"),
               numBlocks:    0, 
               rateCurrent:  0, 
               rate1Min:     0, 
@@ -94,14 +95,13 @@ class FirmStore extends ReduceStore {
           if (portMap === undefined) {
             portMap = Map();
           }
-          let port = pf.get("port");
           portMap = portMap.set(
-            port, fromJS(
+            port.get("port"), fromJS(
               {
 	        last:         '00:00:00.000',
 		firm:         firmName,
-		port:         pf.get("port"),
-		ring:         pf.get("ring"),
+		port:         port.get("port"),
+		ring:         port.get("ring"),
 		numBlocks:    0, 
 		rateCurrent:  0, 
 		rate1Min:     0, 
@@ -128,15 +128,15 @@ class FirmStore extends ReduceStore {
 
         return state.mergeDeep(
           fromJS({
-            "firms":       firmToFirmTotalsMap,
-            "firmDetails": firmToPortTotalsMap,
+            "groupMap":       firmToFirmTotalsMap,
+            "groupPortMap": firmToPortTotalsMap,
           })
         );
       case ActionTypes.ON_PORT_UPDATE:
 //        console.log("ON_PORT_UPDATE");
         
         // reset changed flag
-        let curFirms  = state.get("firms");
+        let curFirms  = state.get("groupMap");
         curFirms = curFirms.map( f => f.set("changed", false));
 
         let event = action.firm;
@@ -156,7 +156,7 @@ class FirmStore extends ReduceStore {
 
         // GROUP => PORTS 
         debugger;
-        let curGroupPortMap = state.get("firmDetails");
+        let curGroupPortMap = state.get("groupPortMap");
         console.log("asdfas");     
         console.log(curGroupPortMap);
         let curPortsForFirm = curGroupPortMap.get(firmName);
@@ -189,18 +189,18 @@ class FirmStore extends ReduceStore {
           // update ports if user is viewing same group just updated
           if (selectedGroup == firmName) {
 	    // update his ports w/ global cache
-	    state = state.set("ports", nextGroupPortMap.get(selectedGroup));
+	    state = state.set("portsForSelectedGroup", nextGroupPortMap.get(selectedGroup));
           }
         }
 
-        let summaryInfo = state.get("summaryInfo");
+        let groupSummaryInfo = state.get("groupSummaryInfo");
 
-        let totQuotes = parseInt(summaryInfo.get("totQuotes")) + event.quotes;
-        let totBlocks = parseInt(summaryInfo.get("totBlocks")) + event.blocks;
-        let totPurges = parseInt(summaryInfo.get("totPurges")) + event.purges;
-        let totUndPurges= parseInt(summaryInfo.get("totUndPurges")) + event.undPurges;
+        let totQuotes = parseInt(groupSummaryInfo.get("totQuotes")) + event.quotes;
+        let totBlocks = parseInt(groupSummaryInfo.get("totBlocks")) + event.blocks;
+        let totPurges = parseInt(groupSummaryInfo.get("totPurges")) + event.purges;
+        let totUndPurges= parseInt(groupSummaryInfo.get("totUndPurges")) + event.undPurges;
 
-        state = state.set("summaryInfo", Map()
+        state = state.set("groupSummaryInfo", Map()
               .set("last", event.last)
               .set("totQuotes", totQuotes)
               .set("totBlocks", totBlocks)
@@ -210,8 +210,8 @@ class FirmStore extends ReduceStore {
 
         return state.mergeDeep(
           fromJS({
-            "firms":nextFirms,
-            "firmDetails": nextGroupPortMap,
+            "groupMap":nextFirms,
+            "groupPortMap": nextGroupPortMap,
           })
         );
       case ActionTypes.SORT:
@@ -222,17 +222,17 @@ class FirmStore extends ReduceStore {
         console.log(sorted);
         let sortCol = action.sortCol;
         let sortDir = action.sortDir;
-        return state.set("firms", sorted).set("sortInfo", Map({ [sortCol]:sortDir }));
+        return state.set("groupMap", sorted).set("sortInfo", Map({ [sortCol]:sortDir }));
       case ActionTypes.CLICK_GROUP_ROW:
         console.log("FirmStore::reduce [actionType=CLICK_GROUP_ROW]");
-	let sequencedGroups = state.get("firms").keySeq();
+	let sequencedGroups = state.get("groupMap").keySeq();
 	let selectedGroup = sequencedGroups.get(action.rowIndex);
         console.log("selectedfirm - %s", selectedGroup); 
-        portMap = state.get("firmDetails").get(selectedGroup);         
+        portMap = state.get("groupPortMap").get(selectedGroup);         
         state = state.set("selectedGroup", sequencedGroups.get(action.rowIndex));
-        return state = state.set("ports", portMap);
+        return state = state.set("portsForSelectedGroup", portMap);
       case ActionTypes.CLOSE_PORTS:
-        return state.set("selectedGroup", '').set("ports", Map());
+        return state.set("selectedGroup", '').set("portsForSelectedGroup", Map());
       default:
         return state;
     }

@@ -10,9 +10,8 @@ class FirmApi {
 
   constructor() {
     console.log("FirmAPI");
-    // this.firms = Map();
     // create a List of Maps
-    this.portFirms = Immutable.fromJS([
+    this.ports= Immutable.fromJS([
       { id: 1, name: "WOL2", port: "CRWOL1", ring: "POEM" },
       { id: 2, name: "WOL2", port: "CRWOL2", ring: "POEM" },
       { id: 3, name: "WOL2", port: "CRWOL3", ring: "POEM" },
@@ -34,10 +33,6 @@ class FirmApi {
       
     ]);
 
-    /*this.firms = this.firms.set("WOL2", Map(new Firm(0, "WOL2", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
-    this.firms = this.firms.set("CDRB", Map(new Firm(0, "CDRB", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
-    this.firms = this.firms.set("IMDB", Map(new Firm(0, "IMDB", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));
-    this.firms = this.firms.set("GSM1", Map(new Firm(0, "GSM1", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)));*/
   }
 
   randInt(low, high) {
@@ -45,14 +40,14 @@ class FirmApi {
   }
 
   firmEvent() {
-    let randIdx = Math.floor(Math.random() * (this.portFirms.count()));
-    let groupPort = this.portFirms.get(randIdx);
+    let randIdx = Math.floor(Math.random() * (this.ports.count()));
+    let port = this.ports.get(randIdx);
 
     let evt = {
       last: moment().format('hh:mm:ss.SSS'), // last
-      firm: groupPort.get("name"),
-      port: groupPort.get("port"),
-      ring: groupPort.get("ring"),
+      firm: port.get("name"),
+      port: port.get("port"),
+      ring: port.get("ring"),
       numBlocks:this.randInt(0, 10),             // blocks
       rateCurrent:.08,
       rate1Min:.11,
@@ -78,7 +73,7 @@ class FirmApi {
   }
   
   spinPortFirms() {
-    return this.portFirms;
+    return this.ports;
   }
 }
 

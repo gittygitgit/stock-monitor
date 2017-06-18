@@ -34,11 +34,11 @@ class SQFGrid extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     //console.log("SQFGrid::componentWillReceiveProps");
-    let now     = this.props.firms;
-    let next    = nextProps.firms;
+    let now     = this.props.groups;
+    let next    = nextProps.groups;
 
     for (let k of now.keys()) {
-      //detect changed firms
+      //detect changed groups 
       if (!now.get(k).equals(next.get(k))) {
 //        console.log(k + " changed.");
         
@@ -53,8 +53,8 @@ class SQFGrid extends React.Component {
   _onSortChange(colKey, colDir) {
     console.log("SQFGrid::onSort [colKey=%s, colDir=%s]", colKey, colDir);
     
-    console.log(this.props.firms);
-    let sorted = this.props.firms.sortBy(
+    console.log(this.props.groups);
+    let sorted = this.props.groups.sortBy(
       (v, k) => {
         console.log(v.get(colKey));
         return v.get(colKey); 
@@ -86,16 +86,16 @@ class SQFGrid extends React.Component {
 
   render() {
     //console.log("SQFGrid::render");
-    if (this.props.firms == null) {
+    if (this.props.groups== null) {
       return null;
     }
-    if (this.props.firms.size === 0) {
+    if (this.props.groups.size === 0) {
       return null;
     }
-    let rows = this.props.firms.toIndexedSeq();
+    let rows = this.props.groups.toIndexedSeq();
     return (
       <Table
-        rowsCount={this.props.firms.size}
+        rowsCount={this.props.groups.size}
         rowHeight={30}
         width={1100}
         height={700}

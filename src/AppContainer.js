@@ -15,14 +15,13 @@ class AppContainer extends React.Component {
     //console.log("AppContainer::calculateState");
     console.log(FirmStore.getState());
     return {
-      firms:             FirmStore.getState().get("firms"),
-      ports:             FirmStore.getState().get("ports"),
+      groups:            FirmStore.getState().get("groupMap"),
+      ports:             FirmStore.getState().get("portsForSelectedGroup"),
       sortInfo:          FirmStore.getState().get("sortInfo"),
-      summaryInfo:       FirmStore.getState().get("summaryInfo"),
+      summaryInfo:       FirmStore.getState().get("groupSummaryInfo"),
       selectedGroup:     FirmStore.getState().get("selectedGroup"),
       actions: {
         initialize:      Actions.initialize,
-        addFirm:         Actions.addFirm,
         firmEvent:       Actions.firmEvent,
         sort:            Actions.sort,
         clickGroupRow:   Actions.clickGroupRow, 
@@ -33,7 +32,7 @@ class AppContainer extends React.Component {
 
   render(props) {
     //console.log("AppContainer::render");
-    return ( <AppView firms={this.state.firms} ports={this.state.ports} actions={this.state.actions} sortInfo={this.state.sortInfo} summaryInfo={this.state.summaryInfo} selectedGroup={this.state.selectedGroup}></AppView> );
+    return ( <AppView groups={this.state.groups} ports={this.state.ports} actions={this.state.actions} sortInfo={this.state.sortInfo} summaryInfo={this.state.summaryInfo} selectedGroup={this.state.selectedGroup}></AppView> );
   }
 }
 export default Container.create(AppContainer);
