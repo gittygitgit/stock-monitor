@@ -15,11 +15,19 @@ const Actions = {
       firm,
     });
   },
-  sort(sorted, sortCol, sortDir) {
-    console.log("Actions::sort [sortCol=%s, sortDir=%s]", sortCol, sortDir);
+  sortGroups(sorted, sortCol, sortDir) {
+    console.log("Actions::sortGroups [sortCol=%s, sortDir=%s]", sortCol, sortDir);
     AppDispatcher.dispatch({
-      type:    ActionTypes.SORT,
+      type:    ActionTypes.SORT_GROUPS,
       rows:    sorted,
+      sortCol: sortCol,
+      sortDir: sortDir,
+    });
+  },
+  sortPorts(sortCol, sortDir) {
+    console.log("Actions::sortPorts [sortCol=%s, sortDir=%s]", sortCol, sortDir);
+    AppDispatcher.dispatch({
+      type:    ActionTypes.SORT_PORTS,
       sortCol: sortCol,
       sortDir: sortDir,
     });

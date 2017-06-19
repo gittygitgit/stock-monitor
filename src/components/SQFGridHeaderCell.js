@@ -26,9 +26,6 @@ class SQFGridHeaderCell extends React.Component{
     e.preventDefault();
        
     const {onSortChange, columnKey, sortDir} = this.props; 
-    console.log(this.props);
-    console.log(columnKey);
-    console.log(sortDir);
     
     onSortChange(
       columnKey, 

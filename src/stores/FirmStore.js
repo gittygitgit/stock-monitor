@@ -18,7 +18,8 @@ const moment = require('moment');
   * portsForSelectedGroup  - Map of port to port totals for a selected firm, port => ???
   * groupSummaryInfo       - Map of summary info across firms
   * selectedGroup          - Group selected
-  * sortInfo               - single property value, key is colName, value is asc/desc
+  * groupSortInfo          - single property value, key is colName, value is asc/desc
+  * portSortInfo           - single property value, key is colName, value is asc/desc
   */
 class FirmStore extends ReduceStore {
   constructor() {
@@ -31,7 +32,8 @@ class FirmStore extends ReduceStore {
       groupMap: Map(),
       portsForSelectedGroup: Map(),
       groupPortMap: Map(),
-      sortInfo: {last:SortDir.ASC},
+      groupSortInfo: {last:SortDir.ASC},
+      portSortInfo: {last:SortDir.ASC},
       groupSummaryInfo: Map()
         .set("last", "00:00:00.000")
         .set("totQuotes", 0)
@@ -47,7 +49,6 @@ class FirmStore extends ReduceStore {
    switch (action.type) {
       case ActionTypes.INITIALIZE:
         console.log("INITIALIZE");
-        debugger;
         // Get all portFirms
         // portFirm id => PortFirm
         let idToFirmPortMap = Map();
@@ -153,17 +154,18 @@ class FirmStore extends ReduceStore {
         }
 
         // GROUP => PORTS 
-        debugger;
         let curGroupPortMap = state.get("groupPortMap");
         console.log("asdfas");     
         console.log(curGroupPortMap);
         let curPortsForFirm = curGroupPortMap.get(firmName);
 
- 
+        console.log(curPortsForFirm); 
         entry = Map().set(           
           event.port, 
 	  eventMap.set("changed", false)
         );
+
+        debugger;
 
         let nextPortsForFirm = curPortsForFirm.mergeDeep(
           entry
@@ -212,15 +214,34 @@ class FirmStore extends ReduceStore {
             "groupPortMap": nextGroupPortMap,
           })
         );
-      case ActionTypes.SORT:
-        console.log("FirmStore::reduce [actionType=SORT]");
+      case ActionTypes.SORT_GROUPS:
+        console.log("FirmStore::reduce [actionType=SORT_GROUPS]");
         console.log("sortCol=%s, sortDir=%s", action.sortCol, action.sortDir);
         console.log(state);
         let sorted=action.rows;
         console.log(sorted);
         let sortCol = action.sortCol;
         let sortDir = action.sortDir;
-        return state.set("groupMap", sorted).set("sortInfo", Map({ [sortCol]:sortDir }));
+        return state.set("groupMap", sorted).set("groupSortInfo", Map({ [sortCol]:sortDir }));
+      case ActionTypes.SORT_PORTS:
+        console.log("FirmStore::reduce [actionType=SORT_PORTS]");
+        console.log("sortCol=%s, sortDir=%s", action.sortCol, action.sortDir);
+        console.log(state);
+
+        if (!state.get("selectedGroup")) {
+          console.error("No group selected");
+          return;
+        }
+       
+        selectedGroup = state.get("selectedGroup");
+        console.log(selectedGroup); 
+        portMap = state.get("groupPortMap").get(selectedGroup);
+
+        ({sortCol, sortDir} = action);
+        portMap = this._onSortChange(portMap, sortCol, sortDir);
+
+        state = state.setIn(["groupPortMap", selectedGroup], portMap)
+        return state.set("portsForSelectedGroup", portMap).set("portSortInfo", Map({ [sortCol]:sortDir }));
       case ActionTypes.ON_SELECT_GROUP:
         console.log("FirmStore::reduce [actionType=ON_SELECT_GROUP]");
 	let sequencedGroups = state.get("groupMap").keySeq();
@@ -235,6 +256,34 @@ class FirmStore extends ReduceStore {
         return state;
     }
   }
+
+  _onSortChange(collection, colKey, colDir) {
+    console.log("FirmStore:_onSortChange [colKey=%s, colDir=%s]", colKey, colDir);
+
+    let sorted = collection.sortBy(
+      (v, k) => {
+        console.log(v.get(colKey));
+        return v.get(colKey);
+      },
+      (a, b) => {
+        let result = 0;
+        if ( a < b ) {
+          result = -1;
+        } else if ( a == b ) {
+          result = 0;
+        } else {
+          result = 1;
+        }
+        if (result !== 0 && colDir === SortDir.DESC) {
+          result *= -1;
+        }
+        return result;
+      }
+    );
+    console.log(sorted);
+    return sorted;
+  }
+
 }
 
 export default new FirmStore();
