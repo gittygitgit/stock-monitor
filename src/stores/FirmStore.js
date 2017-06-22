@@ -84,8 +84,6 @@ class FirmStore extends ReduceStore {
 	  eventMap.set("changed", false)
         );
 
-        debugger;
-
         let nextPortsForFirm = curPortsForFirm.mergeDeep(
           entry
         );
@@ -136,7 +134,6 @@ class FirmStore extends ReduceStore {
       case ActionTypes.SORT_GROUPS:
         console.log("FirmStore::reduce [actionType=SORT_GROUPS]");
         console.log("sortCol=%s, sortDir=%s", action.sortCol, action.sortDir);
-        console.log(state);
         let sorted=action.rows;
         console.log(sorted);
         let sortCol = action.sortCol;
@@ -154,7 +151,7 @@ class FirmStore extends ReduceStore {
        
         selectedGroup = state.get("selectedGroup");
         console.log(selectedGroup); 
-        portMap = state.get("groupPortMap").get(selectedGroup);
+        let portMap = state.get("groupPortMap").get(selectedGroup);
 
         ({sortCol, sortDir} = action);
         portMap = this._onSortChange(portMap, sortCol, sortDir);
@@ -162,6 +159,7 @@ class FirmStore extends ReduceStore {
         state = state.setIn(["groupPortMap", selectedGroup], portMap)
         return state.set("portsForSelectedGroup", portMap).set("portSortInfo", Map({ [sortCol]:sortDir }));
       case ActionTypes.ON_SELECT_GROUP:
+        debugger;
         console.log("FirmStore::reduce [actionType=ON_SELECT_GROUP]");
 	let sequencedGroups = state.get("groupMap").keySeq();
 	let selectedGroup = sequencedGroups.get(action.rowIndex);
@@ -199,7 +197,7 @@ class FirmStore extends ReduceStore {
       groupName:    msg.groupName,
       name:         msg.name,
       ringName:     msg.ringName,
-      numBlocks:    0,
+      blocks:    0,
       rateCurrent:  0,
       rate1Min:     0,
       rate5Min:     0,
@@ -208,17 +206,17 @@ class FirmStore extends ReduceStore {
       limitCurrent: 0,
       limit1Min:    0,
       limit5Min:    0,
-      quotes:       0,
-      blocks:       0,
-      purges:       0,
-      undPurges:    0,
+      numQuotes:       0,
+      numBlocks:       0,
+      numPurges:       0,
+      numUndPurges:    0,
       changed:      false});
 
     if (!state.get("groupMap").has(msg.groupName)) {
       state = state.setIn(["groupMap", msg.groupName], entry);
     }
 
-    return state.setIn(["groupPortMap", msg.groupName], entry);
+    return state.setIn(["groupPortMap", msg.groupName, msg.name], entry);
   }
 
   onPortActivity(state, msg) {
@@ -229,8 +227,7 @@ class FirmStore extends ReduceStore {
 
     let currentGroupMap  = state.get("groupMap");
 
-    debugger;
-
+    //------------------------------
     // update group-level totals
     let now = currentGroupMap.get(msg.groupName);
     let next = now.mergeWith(
@@ -253,6 +250,49 @@ class FirmStore extends ReduceStore {
           ["groupMap", msg.groupName], next
     );
 
+
+    //------------------------------
+    // update port-level totals
+debugger;
+    // reset changed in port entry
+    state = state
+      .updateIn(["groupPortMap", msg.groupName, msg.name, "changed"], changed => false);
+
+    let nextPort = state.getIn(["groupPortMap", msg.groupName, msg.name]);
+
+    nextPort = nextPort.mergeWith(
+      (oldVal, newVal, key) => {
+        switch(key) {
+          case "numBlocks":
+          case "numQuotes":
+          case "numPurges":
+          case "numUndPurges":
+            return oldVal + newVal;
+          default:
+            return newVal;
+        }
+      }, Map(msg)
+    );
+
+    state = state.setIn(
+      ["groupPortMap", msg.groupName, msg.name], 
+      nextPort
+    );
+
+    let showingPortMap = state.get("selectedGroup");
+
+    if (showingPortMap) {
+      // user has a firm selected
+      let selectedGroup = state.get("selectedGroup");
+
+      // update ports if user is viewing same group just updated
+      if (selectedGroup == msg.groupName) {
+	// update his ports w/ global cache
+	state = state.set("portsForSelectedGroup", nextGroupPortMap.get(selectedGroup));
+      }
+    }
+
+    //------------------------------
     // update global summary totals
     now = state.get("groupSummaryInfo");
     next = 

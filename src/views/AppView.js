@@ -30,7 +30,6 @@ class AppView extends React.Component {
       300
     );
 */
-    debugger;
     stompClient.register([
       {route: '/topic/sqf', callback: this.props.actions.onWSMessage}
     ]);
