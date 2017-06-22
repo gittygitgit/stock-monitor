@@ -288,7 +288,7 @@ debugger;
       // update ports if user is viewing same group just updated
       if (selectedGroup == msg.groupName) {
 	// update his ports w/ global cache
-	state = state.set("portsForSelectedGroup", nextGroupPortMap.get(selectedGroup));
+	state = state.set("portsForSelectedGroup", state.getIn(["groupPortMap", selectedGroup]));
       }
     }
 
