@@ -44,6 +44,14 @@ const Actions = {
     AppDispatcher.dispatch({
       type: ActionTypes.CLOSE_PORTS,
     });
+  },
+  onWSMessage(msg) {
+    console.log("Actions::onWSMessage");
+    console.log(msg.body);
+    AppDispatcher.dispatch({
+      type: ActionTypes.ON_WS_MESSAGE,
+      msg:  JSON.parse(msg.body),
+    });
   }
 };
 

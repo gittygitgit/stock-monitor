@@ -2,6 +2,8 @@ import React from 'react';
 import SQFMainDash from '../components/SQFMainDash';
 import SideBar from '../components/SideBar';
 import FirmApi from '../api/FirmApi'
+const stompClient = require('../websocket-listener');
+
 class AppView extends React.Component {
 
   constructor(props) {
@@ -20,13 +22,18 @@ class AppView extends React.Component {
   componentDidMount() {
     this.props.actions.initialize(); 
 //    this.props.actions.clickGroupRow(2);
-    this.timerId = setInterval(
+/*    this.timerId = setInterval(
       () => {
         let e = this.firmApi.firmEvent();
         this.props.actions.firmEvent(e);
       },
       300
     );
+*/
+    debugger;
+    stompClient.register([
+      {route: '/topic/sqf', callback: this.props.actions.onWSMessage}
+    ]);
   }
 
   render(props) {

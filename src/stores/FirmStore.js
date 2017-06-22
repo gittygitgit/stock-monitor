@@ -49,94 +49,13 @@ class FirmStore extends ReduceStore {
    switch (action.type) {
       case ActionTypes.INITIALIZE:
         console.log("INITIALIZE");
-        // Get all portFirms
-        // portFirm id => PortFirm
-        let idToFirmPortMap = Map();
-        // firmname => FirmDetail
-        let firmToFirmTotalsMap = Map();
-        // firmname => FirmDetail
-        let firmToPortTotalsMap = Map();
-
-
-        let portMap;
-  
-        // TODO: Replace w/ callback off a core Websocket connection
-        FirmApi.spinPortFirms().forEach(port => { 
-          let firmName = port.get("name");
-          idToFirmPortMap = idToFirmPortMap.set(port.get("id"), port);
-          let detail = null;
-          if (!firmToFirmTotalsMap.has(firmName)) {
-            detail = fromJS({
-              last:         '00:00:00.000',
-              firm:         firmName,
-              port:         port.get("port"),
-              ring:         port.get("ring"),
-              numBlocks:    0, 
-              rateCurrent:  0, 
-              rate1Min:     0, 
-              rate5Min:     0, 
-              qlCurrent:    0, 
-              ql1Min:       0, 
-              limitCurrent: 0, 
-              limit1Min:    0, 
-              limit5Min:    0, 
-              quotes:       0, 
-              blocks:       0, 
-              purges:       0, 
-              undPurges:    0});
-
-            firmToFirmTotalsMap = firmToFirmTotalsMap.set(
-              firmName, detail
-            );
-          } 
-          
-          portMap = firmToPortTotalsMap.get(firmName);
-          if (portMap === undefined) {
-            portMap = Map();
-          }
-          portMap = portMap.set(
-            port.get("port"), fromJS(
-              {
-	        last:         '00:00:00.000',
-		firm:         firmName,
-		port:         port.get("port"),
-		ring:         port.get("ring"),
-		numBlocks:    0, 
-		rateCurrent:  0, 
-		rate1Min:     0, 
-		rate5Min:     0, 
-		qlCurrent:    0, 
-		ql1Min:       0, 
-		limitCurrent: 0, 
-		limit1Min:    0, 
-		limit5Min:    0, 
-		quotes:       0, 
-		blocks:       0, 
-		purges:       0, 
-		undPurges:    0,
-                changed:      false,
-              }
-            )
-          );
-   
-          firmToPortTotalsMap = firmToPortTotalsMap.set(
-            firmName,
-            portMap
-          ) 
-        });
-
-        return state.mergeDeep(
-          fromJS({
-            "groupMap":       firmToFirmTotalsMap,
-            "groupPortMap": firmToPortTotalsMap,
-          })
-        );
+        return state;
       case ActionTypes.ON_PORT_UPDATE:
 //        console.log("ON_PORT_UPDATE");
         
         // reset changed flag
-        let curFirms  = state.get("groupMap");
-        curFirms = curFirms.map( f => f.set("changed", false));
+        let currentGroupMap  = state.get("groupMap");
+        currentGroupMap = currentGroupMap.map( f => f.set("changed", false));
 
         let event = action.firm;
         let firmName = event.firm;
@@ -144,11 +63,11 @@ class FirmStore extends ReduceStore {
         let eventMap = Map(event); 
 	let entry = Map().set(firmName, eventMap);
 
-        let nextFirms = curFirms.mergeDeep(
+        let nextFirms = currentGroupMap.mergeDeep(
           entry
         );
         
-        if (!curFirms.equals(nextFirms)) {
+        if (!currentGroupMap.equals(nextFirms)) {
 //          console.log("state changed"); 
             nextFirms = nextFirms.set(event.firm, nextFirms.get(event.firm).set("changed", true));
         }
@@ -252,9 +171,100 @@ class FirmStore extends ReduceStore {
         return state = state.set("portsForSelectedGroup", portMap);
       case ActionTypes.CLOSE_PORTS:
         return state.set("selectedGroup", '').set("portsForSelectedGroup", Map());
+      case ActionTypes.ON_WS_MESSAGE:
+        console.log("FirmStore::reduce [actionType=ON_WS_MESSAGE]");
+        switch(action.msg.msgType) {
+          case 'P':
+            console.log("Port Activity");
+            return this.onPortActivity(state, action.msg);
+            break;
+          case 'C':
+            console.log("Port Connection Event");
+            break;
+          case 'M':
+            console.log("Port Maint");
+            return this.onPortMaint(state, action.msg);
+            break;
+        }
+        return state;
       default:
         return state;
     }
+  }
+
+  onPortMaint(state, msg) {
+    console.log("FirmStore::onPortMaint [msg=%s]", msg);
+    let entry = fromJS({
+      last:         '00:00:00.000',
+      groupName:    msg.groupName,
+      name:         msg.name,
+      ringName:     msg.ringName,
+      numBlocks:    0,
+      rateCurrent:  0,
+      rate1Min:     0,
+      rate5Min:     0,
+      qlCurrent:    0,
+      ql1Min:       0,
+      limitCurrent: 0,
+      limit1Min:    0,
+      limit5Min:    0,
+      quotes:       0,
+      blocks:       0,
+      purges:       0,
+      undPurges:    0,
+      changed:      false});
+
+    if (!state.get("groupMap").has(msg.groupName)) {
+      state = state.setIn(["groupMap", msg.groupName], entry);
+    }
+
+    return state.setIn(["groupPortMap", msg.groupName], entry);
+  }
+
+  onPortActivity(state, msg) {
+    console.log("FirmStore::onPortActivity [msg=%s]", msg);
+
+    // reset changed flag
+    let currentGroupMap  = state.get("groupMap");
+    currentGroupMap = currentGroupMap.map( f => f.set("changed", false));
+
+    debugger;
+
+    // update group-level totals
+    let now = currentGroupMap.get(msg.groupName);
+    let next = now.mergeWith(
+      (oldVal, newVal, key) => {
+        console.log("[old=%s, new=%s, key=%s]", oldVal, newVal, key); 
+        switch(key) {
+          case "numBlocks":
+          case "numQuotes":
+          case "numPurges":
+          case "numUndPurges":
+            return oldVal + newVal;
+          default:
+            return newVal;
+        }
+      }, fromJS(msg)
+    );
+
+    next = next.set("changed", true);
+    state =  state.setIn(
+          ["groupMap", msg.groupName], next
+    );
+
+    // update global summary totals
+    now = state.get("groupSummaryInfo");
+    next = 
+      now
+        .set("last", msg.last)
+        .set("totQuotes", parseInt(now.get("totQuotes")) + msg.numQuotes)
+        .set("totBlocks", parseInt(now.get("totBlocks")) + msg.numBlocks)
+        .set("totPurges", parseInt(now.get("totPurges")) + msg.numPurges)
+        .set("totUndPurges", parseInt(now.get("totUndPurges")) + msg.numUndPurges);
+
+    return state.set("groupSummaryInfo", next);
+
+    
   }
 
   _onSortChange(collection, colKey, colDir) {

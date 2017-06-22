@@ -28,6 +28,7 @@ class AppContainer extends React.Component {
         sortPorts:       Actions.sortPorts,
         clickGroupRow:   Actions.clickGroupRow, 
         onClosePorts:    Actions.onClosePorts,
+        onWSMessage:     Actions.onWSMessage,
       },
     };
   }

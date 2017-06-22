@@ -58,17 +58,17 @@ class SQFPortGrid extends React.Component {
           }
           width={100} />
         <Column
-          columnKey="port"
-          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.portSortInfo.get("port")}>Port</SQFGridHeaderCell>}
+          columnKey="name"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.portSortInfo.get("name")}>Port</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="port" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="name" width={75} {...this.props}></StockMonitorCell>)
           }
           width={100} />
         <Column
-          columnKey="ring"
-          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.portSortInfo.get("ring")}>Ring</SQFGridHeaderCell>}
+          columnKey="ringName"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.portSortInfo.get("ringName")}>Ring</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ring" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ringName" width={75} {...this.props}></StockMonitorCell>)
           }
           width={100} />
         <Column columnKey="numBlocks"
