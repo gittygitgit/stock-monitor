@@ -225,8 +225,9 @@ class FirmStore extends ReduceStore {
     console.log("FirmStore::onPortActivity [msg=%s]", msg);
 
     // reset changed flag
+    state = state.set("groupMap", state.get("groupMap").map( f => f.set("changed", false)));
+
     let currentGroupMap  = state.get("groupMap");
-    currentGroupMap = currentGroupMap.map( f => f.set("changed", false));
 
     debugger;
 

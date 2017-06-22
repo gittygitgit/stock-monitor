@@ -25,7 +25,7 @@ class StockMonitorCell extends React.PureComponent {
     let next = rowsNext.get(rowIndexNext).get(fieldNext);
 
     if (now !== next) {
-//      console.log("The value of %s has changed [old-val: %s, new-val: %s]", field, now, next);
+      console.log("The value of %s has changed [old-val: %s, new-val: %s]", field, now, next);
 
       this.setState({
 	dirty: true

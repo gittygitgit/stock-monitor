@@ -140,8 +140,8 @@ class SQFGrid extends React.Component {
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rate1Min" width={100} {...this.props}></StockMonitorCell>)
           }
           width={100} /> 
-        <Column columnKey="rate5min"
-          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.groupSortInfo.get("rate5min")}>5min R</SQFGridHeaderCell>}
+        <Column columnKey="rate5Min"
+          header={<SQFGridHeaderCell onSortChange={this._onSortChange} sortDir={this.props.groupSortInfo.get("rate5Min")}>5min R</SQFGridHeaderCell>}
           cell={
             ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="rate5Min" width={100} {...this.props}></StockMonitorCell>)
           }
