@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import SummaryTotals from './SummaryTotals';
-
+import SQFPortEventsGrid from './SQFPortEventsGrid';
+ 
 function SideBar(props) {
   const wellStyles = {
-    width: 300,
+    width: 340,
     margin: '0 auto 10px', 
     position: 'fixed',
-    left: 1140,
+    left: 1100,
     top: 0
   };
 
@@ -21,6 +22,7 @@ function SideBar(props) {
       */
       }
       <SummaryTotals summaryInfo={props.summaryInfo}></SummaryTotals>
+      <SQFPortEventsGrid portEvents={props.portEvents}></SQFPortEventsGrid>    
     </div>
   );  
 }

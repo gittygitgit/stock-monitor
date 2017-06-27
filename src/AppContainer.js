@@ -19,6 +19,7 @@ class AppContainer extends React.Component {
       ports:             FirmStore.getState().get("portsForSelectedGroup"),
       groupSortInfo:     FirmStore.getState().get("groupSortInfo"),
       portSortInfo:      FirmStore.getState().get("portSortInfo"),
+      portEvents:        FirmStore.getState().get("portEvents"),
       summaryInfo:       FirmStore.getState().get("groupSummaryInfo"),
       selectedGroup:     FirmStore.getState().get("selectedGroup"),
       actions: {
@@ -35,7 +36,7 @@ class AppContainer extends React.Component {
 
   render(props) {
     //console.log("AppContainer::render");
-    return ( <AppView groups={this.state.groups} ports={this.state.ports} actions={this.state.actions} groupSortInfo={this.state.groupSortInfo} portSortInfo={this.state.portSortInfo} summaryInfo={this.state.summaryInfo} selectedGroup={this.state.selectedGroup}></AppView> );
+    return ( <AppView groups={this.state.groups} ports={this.state.ports} actions={this.state.actions} groupSortInfo={this.state.groupSortInfo} portSortInfo={this.state.portSortInfo} summaryInfo={this.state.summaryInfo} selectedGroup={this.state.selectedGroup} portEvents={this.state.portEvents}></AppView> );
   }
 }
 export default Container.create(AppContainer);

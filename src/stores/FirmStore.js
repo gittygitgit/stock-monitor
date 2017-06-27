@@ -20,6 +20,7 @@ const moment = require('moment');
   * selectedGroup          - Group selected
   * groupSortInfo          - single property value, key is colName, value is asc/desc
   * portSortInfo           - single property value, key is colName, value is asc/desc
+  * portEvents             - List of port events
   */
 class FirmStore extends ReduceStore {
   constructor() {
@@ -29,18 +30,19 @@ class FirmStore extends ReduceStore {
 
   getInitialState() {
     return Immutable.fromJS({
-      groupMap: Map(),
+      groupMap:              Map(),
       portsForSelectedGroup: Map(),
-      groupPortMap: Map(),
-      groupSortInfo: {last:SortDir.ASC},
-      portSortInfo: {last:SortDir.ASC},
-      groupSummaryInfo: Map()
-        .set("last", "00:00:00.000")
-        .set("totQuotes", 0)
-        .set("totBlocks", 0)
-        .set("totPurges", 0)
-        .set("totUndPurges", 0),
-      selectedGroup: '',
+      groupPortMap:          Map(),
+      groupSortInfo:         {last:SortDir.ASC},
+      portSortInfo:          {last:SortDir.ASC},
+      portEvents:            List(), 
+      groupSummaryInfo:      Map()
+                               .set("last", "00:00:00.000")
+                               .set("totQuotes", 0)
+                               .set("totBlocks", 0)
+                               .set("totPurges", 0)
+                               .set("totUndPurges", 0),
+      selectedGroup:         '',
     })
   }
  
@@ -74,11 +76,8 @@ class FirmStore extends ReduceStore {
 
         // GROUP => PORTS 
         let curGroupPortMap = state.get("groupPortMap");
-        console.log("asdfas");     
-        console.log(curGroupPortMap);
         let curPortsForFirm = curGroupPortMap.get(firmName);
 
-        console.log(curPortsForFirm); 
         entry = Map().set(           
           event.port, 
 	  eventMap.set("changed", false)
@@ -159,7 +158,6 @@ class FirmStore extends ReduceStore {
         state = state.setIn(["groupPortMap", selectedGroup], portMap)
         return state.set("portsForSelectedGroup", portMap).set("portSortInfo", Map({ [sortCol]:sortDir }));
       case ActionTypes.ON_SELECT_GROUP:
-        debugger;
         console.log("FirmStore::reduce [actionType=ON_SELECT_GROUP]");
 	let sequencedGroups = state.get("groupMap").keySeq();
 	let selectedGroup = sequencedGroups.get(action.rowIndex);
@@ -178,6 +176,7 @@ class FirmStore extends ReduceStore {
             break;
           case 'C':
             console.log("Port Connection Event");
+            return this.onPortConnectionEvent(state, action.msg);
             break;
           case 'M':
             console.log("Port Maint");
@@ -188,6 +187,18 @@ class FirmStore extends ReduceStore {
       default:
         return state;
     }
+  }
+
+  onPortConnectionEvent(state, msg) {
+    console.log("FirmStore::onPortConnectionEvent [msg=%s]", msg);
+    let event = fromJS({
+      portName:     msg.portName,
+      ringName:     msg.ringName,
+      groupName:    msg.groupName,
+      time:         msg.time,
+      eventName:    msg.event,
+    });
+    return state.setIn(["portEvents", state.get("portEvents").size], event);
   }
 
   onPortMaint(state, msg) {
@@ -232,7 +243,6 @@ class FirmStore extends ReduceStore {
     let now = currentGroupMap.get(msg.groupName);
     let next = now.mergeWith(
       (oldVal, newVal, key) => {
-        console.log("[old=%s, new=%s, key=%s]", oldVal, newVal, key); 
         switch(key) {
           case "numBlocks":
           case "numQuotes":
@@ -253,7 +263,6 @@ class FirmStore extends ReduceStore {
 
     //------------------------------
     // update port-level totals
-debugger;
     // reset changed in port entry
     state = state
       .updateIn(["groupPortMap", msg.groupName, msg.name, "changed"], changed => false);

@@ -1,11 +1,13 @@
 "use strict"
 
 import React from 'react'
-const {Table, Column, Cell} = require('fixed-data-table-2')
 import TextCell from './TextCell'
 import SortDir from './SortDir';
+const {Table} = require('react-bootstrap');
 
 class SummaryTotals extends React.Component {
+
+
   constructor(props) {
     super(props);
     console.log("SummaryTotals::ctor");
@@ -20,13 +22,41 @@ class SummaryTotals extends React.Component {
     //console.log("SummaryTotals::render");
     const {summaryInfo} = this.props;
     return (
-      <div>
-	<div>Last: {summaryInfo.get("last")}</div>
-	<div>Quotes: {summaryInfo.get("totQuotes")}</div>
-	<div>Blocks: {summaryInfo.get("totBlocks")}</div>
-	<div>Purges: {summaryInfo.get("totPurges")}</div>
-	<div>Und Purges: {summaryInfo.get("totUndPurges")}</div>
-      </div>
+      <Table>
+        <tbody>
+          <tr>
+            <td colSpan="3">{summaryInfo.get("last")}</td>
+          </tr>
+          <tr>
+            <td>Rate:</td>
+            <td colSpan="2"></td>
+          </tr>
+          <tr>
+            <td>Block Size:</td>
+            <td colSpan="2"></td>
+          </tr>
+          <tr>
+            <td>Quotes</td>
+            <td colSpan="2">{summaryInfo.get("totQuotes")}</td>
+          </tr>
+          <tr>
+            <td>Blocks</td>
+            <td colSpan="2">{summaryInfo.get("totBlocks")}</td>
+          </tr>
+          <tr>
+            <td>Purges</td>
+            <td colSpan="2">{summaryInfo.get("totPurges")}</td>
+          </tr>
+          <tr>
+            <td>Und Purges</td>
+            <td colSpan="2">{summaryInfo.get("totUndPurges")}</td>
+          </tr>
+          <tr>
+            <td>Rejects</td>
+            <td colSpan="2"></td>
+          </tr>
+        </tbody>
+      </Table>
     );
 
   }
