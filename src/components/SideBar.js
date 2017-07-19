@@ -7,6 +7,7 @@ function SideBar(props) {
   const wellStyles = {
     width: 340,
     margin: '0 auto 10px', 
+    padding: 0,
     position: 'fixed',
     left: 1100,
     top: 0

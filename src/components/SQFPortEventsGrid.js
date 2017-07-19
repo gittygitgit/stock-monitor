@@ -34,8 +34,8 @@ class SQFPortEventsGrid extends React.Component {
       <Table
         rowsCount={rows.size}
         rowHeight={30}
-        width={400}
-        height={600}
+        width={340}
+        height={460}
         allowCellsRecycling={true}
         rowClassNameGetter={this._rowClassNameGetter}
         headerHeight={30} >
@@ -43,23 +43,23 @@ class SQFPortEventsGrid extends React.Component {
           columnKey="time"
           header={<SQFGridHeaderCell>Time</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="time" width={100} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="time" width={90} {...this.props}></StockMonitorCell>)
           }
-          width={100} />
+          width={90} />
         <Column
           columnKey="portName"
           header={<SQFGridHeaderCell>Port</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="portName" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="portName" width={65} {...this.props}></StockMonitorCell>)
           }
-          width={100} />
+          width={65} />
         <Column
           columnKey="ringName"
           header={<SQFGridHeaderCell>Ring</SQFGridHeaderCell>}
           cell={
-            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ringName" width={75} {...this.props}></StockMonitorCell>)
+            ({rowIndex}) => (<StockMonitorCell rowIndex={rowIndex} rows={rows} field="ringName" width={50} {...this.props}></StockMonitorCell>)
           }
-          width={100} />
+          width={50} />
         <Column columnKey="eventName"
           header={<SQFGridHeaderCell>Info</SQFGridHeaderCell>}
           cell={

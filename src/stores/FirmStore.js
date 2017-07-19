@@ -21,12 +21,14 @@ const moment = require('moment');
   * groupSortInfo          - single property value, key is colName, value is asc/desc
   * portSortInfo           - single property value, key is colName, value is asc/desc
   * portEvents             - List of port events
+  * latencyStream          - List of latencies
   */
 class FirmStore extends ReduceStore {
   constructor() {
 //    console.log("FirmStore::ctor");
     super(AppDispatcher);
   }
+
 
   getInitialState() {
     return Immutable.fromJS({
@@ -43,6 +45,14 @@ class FirmStore extends ReduceStore {
                                .set("totPurges", 0)
                                .set("totUndPurges", 0),
       selectedGroup:         '',
+      latencyStream:         List(
+                               [ 
+                                 {time:'22:59:01.123', val:.0412},
+                                 {time:'22:59:02.113', val:.0512},
+                                 {time:'22:59:03.123', val:.0012},
+                                 {time:'22:59:05.123', val:.0200},
+                                 {time:'22:59:05.123', val:.0111},
+                               ]),
     })
   }
  
@@ -300,6 +310,14 @@ class FirmStore extends ReduceStore {
 	state = state.set("portsForSelectedGroup", state.getIn(["groupPortMap", selectedGroup]));
       }
     }
+
+    //------------------------------
+    // Update time-series
+    now = state.get("latencyStream");
+    next = now.push({time:msg.last, val:msg.ql1Min});
+
+    state = state.set("latencyStream", next);
+
 
     //------------------------------
     // update global summary totals

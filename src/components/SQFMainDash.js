@@ -1,6 +1,7 @@
 "use strict"
 
 import React from 'react';
+import TestLineChartWrapper from './TestLineChartWrapper';
 import SQFGrid from './SQFGrid';
 import SQFPortGrid from './SQFPortGrid';
 import { Modal, Button } from 'react-bootstrap'; 
@@ -23,6 +24,7 @@ class SQFMainDash extends React.Component {
     return  (
       <div id="foo">
 	<SQFGrid width={800} {...this.props}></SQFGrid>
+        <TestLineChartWrapper latencyStream={this.props.latencyStream}/>
 	<Modal
 	  show={this.props.selectedGroup}
 	  onHide={this.closePorts}

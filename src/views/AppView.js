@@ -40,7 +40,7 @@ class AppView extends React.Component {
     return (
     <div id="wrapper">
       <div id="page-content-wrapper" className="container-fluid" style={this.style}>
-        <SQFMainDash width={1000} {...this.props}></SQFMainDash>
+        <SQFMainDash width={1000} latencyStream={this.props.latencyStream} {...this.props}></SQFMainDash>
         <SideBar summaryInfo={this.props.summaryInfo} portEvents={this.props.portEvents}/>
       </div>
     </div>
