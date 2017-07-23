@@ -45,14 +45,7 @@ class FirmStore extends ReduceStore {
                                .set("totPurges", 0)
                                .set("totUndPurges", 0),
       selectedGroup:         '',
-      latencyStream:         List(
-                               [ 
-                                 {time:'22:59:01.123', val:.0412},
-                                 {time:'22:59:02.113', val:.0512},
-                                 {time:'22:59:03.123', val:.0012},
-                                 {time:'22:59:05.123', val:.0200},
-                                 {time:'22:59:05.123', val:.0111},
-                               ]),
+      latencyStream:         List(),
     })
   }
  
@@ -314,7 +307,13 @@ class FirmStore extends ReduceStore {
     //------------------------------
     // Update time-series
     now = state.get("latencyStream");
-    next = now.push({time:msg.last, val:msg.ql1Min});
+    let data = {time:msg.last, val:msg.ql1Min};
+
+    if (now.size > 40) {
+      next = now.push(data).shift();
+    } else {
+      next = now.push(data);
+    }
 
     state = state.set("latencyStream", next);
 
